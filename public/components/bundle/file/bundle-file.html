@@ -1,0 +1,141 @@
+<div class="panel panel-default" ng-controller="BundleFileController as bundleFile">
+
+    <div class="panel-heading clearfix">
+        <a class="glyphicon glyphicon-refresh link-no-style pull-left"
+           tooltip="Refresh bundle list" ng-click="bundleFile.loadBundleFiles(bundleFile.bundleData)"></a>
+        <h4 class="panel-title pull-left">&nbsp;&nbsp;Bundles</h4>
+        <a class="glyphicon link-no-style pull-right"
+           style="font-size:20px;"
+           tooltip="{{bundleFile.showUpload ? 'Close upload form' : 'Upload bundle file'}}"
+           ng-class="bundleFile.showUpload ? 'glyphicon-remove-circle' : 'glyphicon-upload'"
+           ng-click="bundleFile.showUploadForm()"></a>
+    </div>
+    <div class="panel-body">
+        <div ng-hide="bundleFile.showUpload">
+            <tabset justified="true">
+                <tab heading="{{bundleFile.tabs[0].title}}">
+                    <br>
+                    <div ng-show="bundleFile.bundleData.market">
+                        <div class="row bg-primary" style="margin:0 1px">
+                            <div class="col-xs-3 col-md-3 text-center"><h6>Env</h6></div>
+                            <div class="col-xs-3 col-md-3 text-center"><h6>Version</h6></div>
+                            <div class="col-xs-4 col-md-4 text-center"><h6>Update Time</h6></div>
+                            <div class="col-xs-2 col-md-2 text-center"><h6>Version Check</h6></div>
+                        </div>
+                        <div class="row bg-warning row-padding-small"
+                             ng-repeat="bundle in bundleFile.bundleList"
+                             style="margin:0 1px">
+                            <div class="col-xs-3 col-md-3 text-center">{{bundle.environment}}</div>
+                            <div class="col-xs-3 col-md-3 text-center">
+                                <div class="input-group">
+                                    <select ng-model="bundle.version" class="form-control">
+                                        <option ng-repeat="file in bundleFile.fileList">{{file.version}}</option>
+                                    </select>
+                                <a class="input-group-addon glyphicon glyphicon-floppy-disk link-no-style"
+                                   tooltip="Save" tooltip-placement="up"
+                                   ng-click="bundleFile.changeVersion($index)"></a>
+                                </div>
+                            </div>
+                            <div class="col-xs-4 col-md-4 text-center">
+                                <small>{{bundle.localUpdateTime}}</small>
+                            </div>
+                            <div class="col-xs-2 col-md-2 text-center">
+                                <input type="checkbox"
+                                       ng-model="bundle.is_version_check"
+                                       ng-true-value="'Y'" ng-false-value="'N'"
+                                       ng-change="bundleFile.changeVersionCheck($index)">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger" ng-hide="bundleFile.bundleData.market">
+                        No App Id selected
+                    </div>
+                </tab>
+                <tab heading="{{bundleFile.tabs[1].title}}">
+                    <br>
+                    <div ng-hide="bundleFile.fileList.length == 0">
+                        <div class="row bg-primary" style="margin:0 1px">
+                            <div class="col-xs-3 col-md-3 text-center"><h5>Env</h5></div>
+                            <div class="col-xs-2 col-md-2 text-center"><h5>Version</h5></div>
+                            <div class="col-xs-4 col-md-4 text-center"><h5>Update Time</h5></div>
+                            <div class="col-xs-3 col-md-3 text-center"><h5>Edit</h5></div>
+                        </div>
+                        <div class="row bg-warning row-padding-small" ng-repeat="file in bundleFile.fileList"
+                             style="margin:0 1px">
+                            <div class="col-xs-3 col-md-3 text-center">{{file.environment}}</div>
+                            <div class="col-xs-2 col-md-2 text-center">{{file.version}}</div>
+                            <div class="col-xs-4 col-md-4 text-center">
+                                <small>{{file.localUpdateTime}}</small>
+                            </div>
+                            <div class="col-xs-3 col-md-3 text-center">ediit button</div>
+                        </div>
+                    </div>
+                    <div class="alert alert-danger" ng-show="bundleFile.fileList.length == 0">
+                        Bundle file not found
+                    </div>
+                </tab>
+            </tabset>
+        </div>
+        <div ng-show="bundleFile.showUpload">
+            <form novalidate> <!-- TODO: use ngform-->
+                <div class="input-group  input-group-sm">
+                    <label for="product">Product</label>
+                    <input type="text" id='product' class="form-control" ng-disabled="true"
+                           ng-model="bundleFile.newBundleTemplate.product">
+                </div>
+                <div class="input-group  input-group-sm">
+                    <label for="device">Device</label>
+                    <input type="text" id="device" class="form-control" ng-disabled="true"
+                           ng-model="bundleFile.newBundleTemplate.device">
+                </div>
+                <div class="input-group  input-group-sm">
+                    <label for="market">App Id</label>
+                    <input type="text" id="market" class="form-control" ng-disabled="true"
+                           ng-model="bundleFile.newBundleTemplate.market">
+                </div>
+                <div class="input-group  input-group-sm">
+                    <label for="file">File</label>
+                    <input type="file" id="file"
+                           file-model="newBundleFile"
+                           class="form-control">
+                    <span class="help-block text-required"><small>* Required</small></span>
+                </div>
+                <div class="input-group  input-group-sm">
+                    <label for="version">Version</label>
+                    <input type="text" id="version" class="form-control"
+                           ng-model="bundleFile.newBundleTemplate.version">
+                    <span class="help-block text-required"><small>* Required</small></span>
+                </div>
+                <div class="input-group">
+                    <label for="note">Note</label>
+                    <textarea type="text" id="note" class="form-control"
+                              rows="5" cols="35" style="resize:none;" placeholder="Note"
+                              ng-model="bundleFile.newBundleTemplate.note"></textarea>
+                </div>
+                <br>
+
+                <div ng-show='bundleFile.uploadError' class="alert alert-danger alert-dismissable" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"
+                            ng-click="bundleFile.hideError()"><span aria-hidden="true">&times;</span></button>
+                    <strong>Error!</strong> Required data must be filled.
+                </div>
+                <div ng-show='bundleFile.uploadSucceed' class="alert alert-success alert-dismissable" role="alert">
+                    <a class="link-no-style" ng-click="bundleFile.closeUploadForm()"><strong>Done!</strong> Click here
+                        to go back to bundle list.</a>
+                </div>
+                <button class="btn btn-block btn-success"
+                        type="submit"
+                        ng-disabled="bundleFile.uploading"
+                        ng-click="bundleFile.upload()">
+                    Upload
+                </button>
+                <button class="btn btn-block btn-danger"
+                        ng-disabled="bundleFile.uploading"
+                        ng-click="bundleFile.cancel()">
+                    Close
+                </button>
+            </form>
+        </div>
+    </div>
+
+</div>

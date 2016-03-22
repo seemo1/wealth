@@ -1,0 +1,61 @@
+iframe {
+    display: block;
+    width: 100%;
+    border: none;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: auto;
+}
+
+.vertical-middle {
+    vertical-align: middle !important;
+}
+
+/* don't remove this, important for angular-bootstrap */
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+.text-required {
+    color:red;
+}
+
+.link-no-style {
+    text-decoration: none !important;
+}
+
+.row-vspace-small {
+    margin: 3px 0;
+}
+
+.row-padding-small{
+    padding: 6px 0;
+}
+
+.table-small-row{
+    word-wrap: break-word;
+    min-width: 100px;
+    max-width: 100px;
+    white-space:normal;
+}
+
+.table-medium-row{
+    word-wrap: break-word;
+    min-width: 150px;
+    max-width: 150px;
+    white-space:normal;
+}
+
+li.active > a {
+    color:white;
+}
+li.active {
+    background-color: #337ab7;
+}
+
+.icon-color-green{
+    color:green;
+}
+
+.img-thumbnail {
+    padding: 0px !important;
+    border: 2px solid red !important;
+}

@@ -1,0 +1,64 @@
+<div class="container-fluid">
+    <div class="row" ng-controller="DashboardController as dashboard">
+        <header></header>
+        <div class="col-xs-2 col-md-2">
+            <left-menu></left-menu>
+        </div>
+        <div class="col-xs-10 col-md-10" ng-switch="dashboard.currentView">
+            <div ng-switch-when="default">Default</div>
+            <!-- TODO: use looping -->
+            <div ng-switch-when="serverActivator">
+                <ng-include src="'/components/server-activator/server-activator.html'"/>
+            </div>
+            <div ng-switch-when="school">
+                <ng-include src="'/components/school/school.html'"/>
+            </div>
+            <div ng-switch-when="contest">
+                <ng-include src="'/components/contest/contest.html'"/>
+            </div>
+            <div ng-switch-when="contestV2">
+                <ng-include src="'/components/contest-v2/contest.html'"/>
+            </div>
+            <div ng-switch-when="adBulletin">
+                <ng-include src="'/components/bulletin/bulletin.html'"/>
+            </div>
+            <div ng-switch-when="adBanner">
+                <ng-include src="'/components/contest-banner/banner.html'"/>
+            </div>
+            <div ng-switch-when="banner">
+                <ng-include src="'/components/banner/banner.html'" />
+            </div>
+            <div ng-switch-when="deepLink">
+                <ng-include src="'/components/deep-link/deep-link.html'" />
+            </div>
+            <div ng-switch-when="systemSettings">
+                <ng-include src="'/components/system-settings/system-settings.html'"/>
+            </div>
+            <div ng-switch-when="group">
+                <ng-include src="'/components/group/group.html'"/>
+            </div>
+            <div ng-switch-when="fuel">
+                <ng-include src="'/components/fuel/fuel.html'"/>
+            </div>
+            <div ng-switch-when="coin">
+                <ng-include src="'/components/coin/coin.html'"/>
+            </div>
+            <div ng-switch-when="user">
+                <ng-include src="'/components/user/user.html'"/>
+            </div>
+            <div ng-switch-when="splashScreen">
+                <ng-include src="'/components/splash-screen/splash-screen.html'"/>
+            </div>
+            <div ng-switch-when="announce">
+                <ng-include src="'/components/announce/announce.html'"/>
+            </div>
+            <div ng-switch-when="student">
+                <ng-include src="'/components/student/student.html'"/>
+            </div>
+            <div ng-switch-when="concentration">
+                <ng-include src="'/components/concentration/concentration.html'"/>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 後台項目新增設定 [Joe Notice]-->

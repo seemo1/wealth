@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+        var isiPad = navigator.userAgent.match(/iPad/i) != null;
+        var isiPhone = navigator.userAgent.match(/iPhone/i) != null;
+        var isandroid = navigator.userAgent.match(/Android/i) != null;
+        var isfdt = (/fdt/ig).test(navigator.userAgent);
+
+        if (isandroid) {
+
+            if(!isfdt) {
+                setTimeout(function () {
+                    window.location = "https://play.google.com/store/apps/details?id=com.hkfdt.en.forex";
+                }, 600);
+            }
+            window.location = "forexmaster://fdt.io/{{deepLink.android_path}}{% autoescape false %}{{queryString}}{% endautoescape %}";
+
+        } else if (isiPhone || isiPad) {
+
+            if(!isfdt) {
+                setTimeout(function () {
+                    window.location = "https://itunes.apple.com/us/app/forexmaster/id911225452";
+                }, 600);
+            }
+            window.location = "ForexMaster://fdt/{{deepLink.ios_path}}{% autoescape false %}{{queryString}}{% endautoescape %}";
+
+        } else {
+            window.location = "http://fdtic.org/blog";
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>

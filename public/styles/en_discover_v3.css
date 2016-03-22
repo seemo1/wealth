@@ -1,0 +1,166 @@
+/* 以下為差異的部份 */
+/*以下為共用的部份*/
+
+body {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    background-color: #ebebeb;
+    margin: 0px;
+    padding: 0px;
+    font-family: "Helvetica", "Arial", "Nimbus Sans", "sans-serif";
+    font-size: 11pt;
+}
+a {
+    text-decoration: none;
+    display:block;
+}
+a:link {color:#000000}
+a:visited {color:#000000}
+a:active {color:#000000}
+a:hover {color:#000000}
+
+.menuBar:active {
+    background-color:rgba(229,228,233, 0.85);
+}
+
+.menuBar{
+    overflow:hidden;
+    background-color: white;
+    display: inline-block;
+    width:100%;
+    align-items:center;
+    height:46px;
+    vertical-align:middle;
+    position: relative;
+}
+
+.menuIcon{
+    width:25px;
+    height:auto;
+    margin-left:10px;
+    margin-right:10px;
+    margin-top:10px;
+    margin-bottom:7px;
+    float:left;
+}
+
+.menuText {
+    border-top:1px solid #e5e4e9;
+    vertical-align: middle;
+    align-items: center;
+    height: 45px;
+    position:inherit;
+    margin-left:45px;
+    right:0px;
+}
+.menuTitle{
+    float:left;
+    position:absolute;
+    height:46px;
+    line-height:46px
+}
+
+.menuArrow{
+    width:16px;
+    position:absolute;
+    right:0px;
+    margin-right:10px;
+    padding-top:15px;
+    position:absolute;
+}
+.menuNew{
+    display:none;
+    width:30px;
+    position:absolute;
+    right:30px;
+    display:none;
+}
+
+/* jssor slider bullet navigator skin 21 css */
+/*
+.jssorb21 div           (normal)
+.jssorb21 div:hover     (normal mouseover)
+.jssorb21 .av           (active)
+.jssorb21 .av:hover     (active mouseover)
+.jssorb21 .dn           (mousedown)
+*/
+.jssorb21 {
+    position: absolute;
+}
+.jssorb21 div, .jssorb21 div:hover, .jssorb21 .av {
+    position: absolute;
+    /* size of bullet elment */
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    line-height: 19px;
+    color: white;
+    font-size: 12px;
+    background: url(/img/b14.png) no-repeat;
+    overflow: hidden;
+    cursor: pointer;
+}
+.jssorb21 div { background-position: -185px -5px; }
+.jssorb21 div:hover, .jssorb21 .av:hover { background-position: -5px -5px; }
+.jssorb21 .av { background-position: -95px -5px; }
+.jssorb21 .dn, .jssorb21 .dn:hover { background-position: -275px -5px; }
+
+.table {
+    display: table;
+    width: 100%;
+}
+
+.table-tr {
+    display: table-row;
+}
+
+.table-td {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.academy-bg {
+    background: #fff;
+    padding: 12px 0;
+}
+
+.academy-cell {
+    border-right: 1px solid #ccc;
+}
+
+.academy-cell:last-child {
+    border-right: 0px;
+}
+
+.hidden {
+    display: none
+}
+
+.dot-red {
+    background: #f00;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+}
+
+.dot-bar {
+    position: absolute;
+    right: 38px;
+    top: 17px;
+}
+
+.dot-square {
+    position: absolute;
+    right: -15px;
+    bottom: 2px;
+}
+
+.academy-img-block {
+    position: relative;
+    display: inline-block;
+    width: 40%;
+}
+
+.academy-img {
+    width: 100%;
+}

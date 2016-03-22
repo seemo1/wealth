@@ -1,0 +1,26 @@
+<div ng-controller="ServerActivatorController as serverActivator" ng-init="serverActivator.getStatus()">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">Server Status</h4>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table ">
+                    <tr class="bg-primary">
+                        <td>Product</td>
+                        <td>Last Update</td>
+                        <td>Active</td>
+                    </tr>
+                    <tr ng-repeat="server in serverActivator.servers | orderBy: 'product' ">
+                        <td>{{server.product}}</td>
+                        <td>{{serverActivator.convertTime(server.update_time)}}</td>
+                        <td>
+                            <toggle-switch ng-model="server.statusBool"
+                                           ng-change="serverActivator.activate($index)">
+                                <toggle-switch>
+                        </td>
+                    </tr>
+                </table>
+        </div>
+    </div>
+</div>

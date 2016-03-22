@@ -1,0 +1,17 @@
+<div class="row" ng-controller="ContestNewsCtrl as newsCtrl">
+    <div class="col-xs-12">
+        <!-- <nav-dir title="全部公告"></nav-dir> -->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="list box">
+                    <div class="list-item" ng-repeat="news in newsCtrl.news">
+                        <div class="list-body">
+                            <a href="" class="_500">{{news.title}}</a>
+                            <small class="block text-muted">{{news.date}}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

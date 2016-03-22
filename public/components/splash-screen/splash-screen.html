@@ -1,0 +1,262 @@
+<div ng-controller="SplashScreenController as splashScreen" ng-init="splashScreen.get()">
+    <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+            <h4 class="panel-title pull-left">Splash Screen</h4>
+            <a href="#"
+               class="glyphicon link-no-style pull-right"
+               ng-class="splashScreen.addFormShow ? 'glyphicon-remove-circle' : 'glyphicon-plus-sign'"
+               ng-click="splashScreen.showHideAddForm()"
+               ng-show="!splashScreen.editFormShow"
+               style="font-size:20px;"></a>
+        </div>
+        <div class="panel-body"><br>
+
+            <div class="row" ng-show="!splashScreen.addFormShow && !splashScreen.editFormShow">
+                <div class="col-sm-12 col-md-12">
+                    <div class="alert alert-block alert-warning" ng-if="splashScreen.list.length < 1">
+                        <h5>No splash screen found</h5>
+                    </div>
+                    <div class="table-responsive" ng-if="splashScreen.list.length > 0">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr class="bg-primary">
+                                <td align="center" class="table-medium-row">Image</td>
+                                <td align="center">Region</td>
+                                <td align="center">Display</td>
+                                <td align="center">Display Until</td>
+                                <td align="center">iOS Link</td>
+                                <td align="center">Android Link</td>
+                                <td align="center">Publish Time</td>
+                                <td align="center">Edit</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="l in splashScreen.list track by $index">
+                                <td align="center" class="table-medium-row vertical-middle">
+                                    <img ng-src="{{:: l.url}}" class="img-responsive" style="max-width:60%;"
+                                         alt="Splash screen" ng-click="splashScreen.setAsDefault($index)">
+                                </td>
+                                <td align="center" class="vertical-middle">{{:: l.region}}</td>
+                                <td align="center" class="vertical-middle">{{:: l.display}}</td>
+                                <td align="center" class="vertical-middle">{{:: l.display_until | date:'yyyy-MM-dd'}}
+                                </td>
+                                <td align="center" class="vertical-middle">{{:: l.ios_link}}</td>
+                                <td align="center" class="vertical-middle">{{:: l.android_link}}</td>
+                                <td align="center" class="vertical-middle">{{:: l.publish_time | date:'yyyy-MM-dd HH:mm:ss'}}
+                                </td>
+                                <td align="center" class="vertical-middle">
+                                    <a style="color:red" class="glyphicon glyphicon-trash"
+                                       aria-hidden="true"
+                                       ng-click="splashScreen.delete($index)" href="#"></a>
+                                    <br>
+                                    <a style="color:red" class="glyphicon glyphicon-edit"
+                                       aria-hidden="true"
+                                       ng-click="splashScreen.showHideEditForm($index)" href="#"></a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-show="splashScreen.addFormShow && !splashScreen.editFormShow">
+                <div class="col-md-12 col-sm-12">
+                    <div class="alert alert-success" ng-if="splashScreen.uploadSuccess"> Done</div>
+                    <div class="alert alert-danger" ng-if="splashScreen.uploadError">{{:: splashScreen.errorMessage}}
+                    </div>
+                    <form class="form-horizontal" name="splashScreen.formSplashScreen" id="formSplashScreen"
+                          ng-submit="splashScreen.save(splashImage)" novalidate>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Region: </label>
+
+                                <div class="col-sm-1" ng-repeat="region in splashScreen.regionList track by $index">
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" ng-click="splashScreen.toggleRegion(region.code)">
+                                            {{region.code}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="display">Display</label>
+
+                                <div class="col-sm-10">
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" id="display"
+                                                      ng-model="splashScreen.newSplashScreen.display"/></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="displayUntil">Display until: </label>
+
+                                <div class="col-sm-10"
+                                     ng-class="splashScreen.formSplashScreen.displayUntil.$invalid ? 'has-error':'has-success'">
+                                    <p class="input-group">
+                                        <input type="text" id="displayUntil" class="form-control"
+                                               datepicker-popup="yyyy-MM-dd"
+                                               placeholder="Display until"
+                                               name="displayUntil"
+                                               ng-model="splashScreen.newSplashScreen.displayUntil"
+                                               is-open="splashScreen.calendarOpened"
+                                               min-date="splashScreen.minDate"
+                                               required close-text="Close"/>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                                ng-click="splashScreen.openCalendar()">
+                                            <i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="iosLink">iOS Link:</label>
+
+                                <div class="col-sm-10"
+                                     ng-class="splashScreen.formSplashScreen.iosLink.$invalid ? 'has-error':'has-success'">
+                                    <input type="text" id="iosLink" name="iosLink"
+                                           class="form-control" ng-model="splashScreen.newSplashScreen.iosLink"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="androidLink">Android Link</label>
+
+                                <div class="col-sm-10"
+                                     ng-class="splashScreen.formSplashScreen.androidLink.$invalid ? 'has-error':'has-success'">
+                                    <input type="text" id="androidLink" name="androidLink"
+                                           class="form-control" ng-model="splashScreen.newSplashScreen.androidLink"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="splashImage">Image</label>
+
+                                <div class="col-sm-10"
+                                     ng-class="splashScreen.formSplashScreen.splashImage.$invalid ? 'has-error':'has-success'">
+                                    <input type="file" id="splashImage" name="splashImage"
+                                           ngf-select ng-model="splashImage" accept="image/jpg,image/jpeg,image/png"
+                                           ngf-validate="{size: {max: '5MB', min: '10B'}, width: {max:1260}, height: {max:2240}}"
+                                           ng-model-rejected="rejFiles" class="form-control" required>
+                                    <span class="text-info">(Max 1260(w) * 2240(h)) Max filesize (5 MB)</span>
+
+                                    <p class="text-danger" ng-repeat="file in rejFiles">{{file.name + ' invalid ' +
+                                        file.$error}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <div class="pull-right">
+                                        <button type="button" class="btn btn-default"
+                                                ng-click="splashScreen.showHideAddForm()">Cancel
+                                        </button>
+                                        <button class="btn btn-primary"
+                                                ng-disabled="splashScreen.formSplashScreen.$invalid || splashScreen.uploading">
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+            <div class="row" ng-show="splashScreen.editFormShow && !splashScreen.addFormShow">
+                <div class="col-md-12 col-sm-12">
+                    <form class="form-horizontal" name="splashScreen.editFormSplashScreen" id="editFormSplashScreen"
+                          ng-submit="splashScreen.update(updateSplashImage)" novalidate>
+                        <fieldset>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Region: </label>
+
+                                <div class="col-sm-1" ng-repeat="region in splashScreen.editRegionList track by $index">
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" ng-click="splashScreen.updateRegion(region)" ng-checked="region.checked">
+                                            {{region.code}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="editDisplay">Display</label>
+
+                                <div class="col-sm-10">
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" id="editDisplay"
+                                                      ng-checked="splashScreen.editSplashScreen.display"
+                                                      ng-click="splashScreen.changeEditDisplay()" /></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="editDisplayUntil">Display until: </label>
+
+                                <div class="col-sm-10"
+                                     ng-class="splashScreen.editFormSplashScreen.editDisplayUntil.$invalid ? 'has-error':'has-success'">
+                                    <p class="input-group">
+                                        <input type="text" id="editDisplayUntil" class="form-control"
+                                               datepicker-popup="yyyy-MM-dd"
+                                               placeholder="Display until"
+                                               name="editDisplayUntil"
+                                               ng-model="splashScreen.editSplashScreen.display_until"
+                                               is-open="splashScreen.calendarOpened"
+                                               min-date="splashScreen.minDate"
+                                               required close-text="Close"/>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                                ng-click="splashScreen.openCalendar()">
+                                            <i class="glyphicon glyphicon-calendar"></i></button>
+                                    </span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="editIosLink">iOS Link:</label>
+
+                                <div class="col-sm-10"
+                                     ng-class="splashScreen.editFormSplashScreen.editIosLink.$invalid ? 'has-error':'has-success'">
+                                    <input type="text" id="editIosLink" name="editIosLink"
+                                           class="form-control" ng-model="splashScreen.editSplashScreen.ios_link"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="androidLink">Android Link</label>
+
+                                <div class="col-sm-10"
+                                     ng-class="splashScreen.editFormSplashScreen.editAndroidLink.$invalid ? 'has-error':'has-success'">
+                                    <input type="text" id="editAndroidLink" name="editAndroidLink"
+                                           class="form-control" ng-model="splashScreen.editSplashScreen.android_link"
+                                           required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label" for="splashImage">Image</label>
+                                <div class="col-sm-10">
+                                    <input type="file" id="updateSplashImage" name="updateSplashImage"
+                                           ngf-select ng-model="updateSplashImage" accept="image/*"
+                                           ngf-validate="{size: {max: '5MB', min: '10B'}, width: {max:1260}, height: {max:2240}}"
+                                           ng-model-rejected="rejFiles" class="form-control" required>
+                                    <span class="text-info">(Max 1260(w) * 2240(h)) Max filesize (5 MB)</span>
+
+                                    <p class="text-danger" ng-repeat="file in rejFiles">{{file.name + ' invalid ' +
+                                        file.$error}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <div class="pull-right">
+                                        <button type="button" class="btn btn-default"  ng-click="splashScreen.showHideEditForm()">Cancel
+                                        </button>
+                                        <button class="btn btn-primary"
+                                                ng-disabled="splashScreen.uploading">Update
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

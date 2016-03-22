@@ -1,0 +1,44 @@
+<div class="row details-head-top-margin">
+    <div class="col-xs-12">
+        <a ng-if="shared !== 'true'" ng-href="{{shareLink}}" class="details-head-share">{{::lang.SHARE}}</a>
+        <div class="box no-margin-bottom head-details-bg"
+             ng-class="headClass">
+            <div class="row tag tag-forex" ng-if="contest.market_code === 'FX'"><span class="tag-name-forex"><strong>{{::lang.FX}}</strong></span></div>
+            <div class="row tag tag-futures" ng-if="contest.market_code === 'FC'"><span class="tag-name-futures"><strong>{{::lang.FC}}</strong></span></div>
+            <div class="row tag tag-futures" ng-if="contest.market_code === 'FT'"><span class="tag-name-futures"><strong>{{::lang.FT}}</strong></span></div>
+            <div class="row tag tag-stock" ng-if="contest.market_code === 'SC'"><span class="tag-name-stock"><strong>{{::lang.SC}}</strong></span></div>  
+            <div class="detail p-a b-b text-center">
+                <p class="detail-icon">
+                    <img ng-src="{{contest.icon_image || '/mobile/contest/styles/img/icon_contest_default.png'}}" class="img-circle w-80 contest-img">
+                </p>
+                <span class="text-md block detail-title" ng-bind="contest.name"></span>
+                <span class="text-sm block text-grey-light" ng-bind="contest.title"></span>
+            </div>
+        </div>
+        <div class="box no-margin-bottom b-b">
+            <div class="row no-gutter">
+                <div class="col-xs-6 b-r">
+                    <div class="p-a-xs block text-center">
+                        <div ng-if="contest.progress_status === 'upcoming'">
+                            <span ng-bind="formattedStartTime"></span>
+                            {{::lang.DAYS_LEFT}}
+                        </div>
+                        <div ng-if="contest.progress_status === 'ongoing'">
+                            <span ng-bind="formattedEndTime"></span>
+                            {{::lang.DAYS_LEFT_2}}
+                        </div>
+                        <span ng-if="contest.progress_status === 'upcoming'" class="text-grey-light block detail-sub-title">{{::lang.STATUS_UPCOMING}}</span>
+                        <span ng-if="contest.progress_status === 'ongoing'" class="text-grey-light block detail-sub-title">{{::lang.STATUS_ONGOING}}</span>
+                        <span ng-if="contest.progress_status === 'past'" class="text-grey-light block detail-sub-title">{{::lang.STATUS_PAST}}</span>
+                    </div>
+                </div>
+                <div class="col-xs-6 b-r">
+                    <div class="p-a-xs block text-center" ng-click='goApplied()'>
+                        <span ng-bind="contest.user_join_sum"></span>
+                        <span class="block text-grey-light detail-sub-title">{{::lang.PEOPLE_APPLIED}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

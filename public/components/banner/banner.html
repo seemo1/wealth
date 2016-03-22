@@ -1,0 +1,42 @@
+<div ng-controller="BannerController as bannerCtrl" ng-init="">
+    <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+            <h4 class="panel-title pull-left">Banner</h4>
+            <a class="glyphicon link-no-style pull-right"
+               style="font-size:20px;"
+               ng-click="bannerCtrl.showAddForm()"
+               ng-class="bannerCtrl.showAddBanner ? 'glyphicon-remove-circle' : 'glyphicon-plus-sign'"
+               ng-hide="bannerCtrl.showEditBanner" href="#"></a>
+        </div>
+        <div class="panel-body">
+            <div ng-hide="bannerCtrl.showAddBanner || bannerCtrl.showEditBanner">
+                <tabset justified="true">
+                    <tab heading="Forex EN" select="bannerCtrl.getBanners('FX', 'EN')">
+                        <ng-include src="'/components/banner/banner-list.html'"/>
+                    </tab>
+                    <tab heading="Forex TW" select="bannerCtrl.getBanners('FX', 'TW')">
+                        <ng-include src="'/components/banner/banner-list.html'"/>
+                    </tab>
+                    <tab heading="Forex CN"  select="bannerCtrl.getBanners('FX', 'CN')">
+                        <ng-include src="'/components/banner/banner-list.html'"/>
+                    </tab>
+                    <tab heading="Futures CN" select="bannerCtrl.getBanners('FC', 'CN')">
+                        <ng-include src="'/components/banner/banner-list.html'"/>
+                    </tab>
+                    <tab heading="Stock CN" select="bannerCtrl.getBanners('SC', 'CN')">
+                        <ng-include src="'/components/banner/banner-list.html'"/>
+                    </tab>
+                    <tab heading="Stock TW" select="bannerCtrl.getBanners('FT', 'TW')">
+                        <ng-include src="'/components/banner/banner-list.html'"/>
+                    </tab>
+                </tabset>
+            </div>
+            <div ng-show="bannerCtrl.showAddBanner">
+                <ng-include src="'/components/banner/banner-add.html'"/>
+            </div>
+            <div ng-show="bannerCtrl.showEditBanner">
+                <ng-include src="'/components/banner/banner-edit.html'"/>
+            </div>
+        </div>
+    </div>
+</div>

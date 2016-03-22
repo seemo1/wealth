@@ -1,0 +1,22 @@
+<!-- <nav-dir title="listUserCtrl.title"></nav-dir> -->
+<div class=" app-body-inner-mb-0">
+    <div class="row animated slideInRight">
+        <div class="col-xs-12">
+            <div class="h-v row-col" ng-if="listUserCtrl.noData">
+                <div class="row-cell v-m text-center"><h5>{{listUserCtrl.lang.NO_MY_CONTEST}}</h5></div>
+            </div>
+            <div>
+                <list-dir contests="listUserCtrl.upcomingContest" title="{{listUserCtrl.lang.CONTEST_UPCOMING}}"
+                          ng-if="listUserCtrl.upcomingContest.length > 0"></list-dir>
+            </div>
+            <div>
+                <list-dir contests="listUserCtrl.ongoingContest" title="{{listUserCtrl.lang.CONTEST_ONGOING}}"
+                          ng-if="listUserCtrl.ongoingContest.length > 0"></list-dir>
+            </div>
+            <div>
+                <list-dir contests="listUserCtrl.pastContest" title="{{listUserCtrl.lang.CONTEST_PAST}}"
+                          ng-if="listUserCtrl.pastContest.length > 0"></list-dir>
+            </div>
+        </div>
+    </div>
+</div>

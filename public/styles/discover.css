@@ -1,0 +1,104 @@
+@font-face {
+    font-family: dina;
+    src: url(/font/dinalternate.ttf);
+}
+
+body{
+    background-color:#ebebeb;
+    margin:0px;
+    padding:0px;
+    font-family: "dina","HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+
+    letter-spacing: -1px;
+    font-size:11pt;
+}
+
+a { text-decoration: none }
+a:link {color:#000000}
+a:visited {color:#000000}
+a:active {color:#000000}
+a:hover {color:#000000}
+
+
+.menuBar{
+    overflow:hidden;
+    background-color: white;
+    display: inline-block;
+    width:100%;
+    align-items:center;
+    height:46px;
+    vertical-align:middle;
+}
+
+.menuIcon{
+    width:25px;
+    height:auto;
+    margin-left:10px;
+    margin-right:10px;
+    margin-top:10px;
+    margin-bottom:7px;
+    float:left;
+}
+
+.menuText {
+    border-bottom: 1px solid #e5e4e9;
+    vertical-align: middle;
+    align-items: center;
+    height: 45px;
+    position:inherit;
+    margin-left:45px;
+    right:0px;
+    background-color: white;
+}
+.menuTitle{
+    float:left;
+    position:absolute;
+    padding-top:16px;
+}
+
+.menuNext{}
+
+
+.menuArrow{
+    width:16px;
+    position:absolute;
+    right:0px;
+    margin-right:10px;
+    padding-top:15px;
+    position:absolute;
+}
+.menuNew{
+    width:30px;
+    position:absolute;
+    right:30px;
+    display:none;
+}
+
+/* jssor slider bullet navigator skin 21 css */
+/*
+.jssorb21 div           (normal)
+.jssorb21 div:hover     (normal mouseover)
+.jssorb21 .av           (active)
+.jssorb21 .av:hover     (active mouseover)
+.jssorb21 .dn           (mousedown)
+*/
+.jssorb21 {
+    position: absolute;
+}
+.jssorb21 div, .jssorb21 div:hover, .jssorb21 .av {
+    position: absolute;
+    /* size of bullet elment */
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    line-height: 19px;
+    color: white;
+    font-size: 12px;
+    background: url(/img/b14.png) no-repeat;
+    overflow: hidden;
+    cursor: pointer;
+}
+.jssorb21 div { background-position: -5px -5px; }
+.jssorb21 div:hover, .jssorb21 .av:hover { background-position: -95px -5px; }
+.jssorb21 .av { background-position: -190px -5px; }
+.jssorb21 .dn, .jssorb21 .dn:hover { background-position: -285px -5px; }

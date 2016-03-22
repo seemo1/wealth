@@ -1,0 +1,25 @@
+<h4>步驟2 : 設定比賽相關的敘述，以及是否有參賽人數的門檻</h4>
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <tabset justified="true">
+            <tab heading="English Information">
+                <ng-include src="'/components/contest/add/contest-general-form-en.html'"/>
+            </tab>
+            <tab heading="比賽相關訊息(簡中)">
+                <ng-include src="'/components/contest/add/contest-general-form-cn.html'"/>
+            </tab>
+            <tab heading="比賽相關訊息(繁中)">
+                <ng-include src="'/components/contest/add/contest-general-form-tw.html'"/>
+            </tab>
+        </tabset>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <button class="btn btn-primary btn-md pull-left" ng-click="addContest.previousStep()">Previous step</button>
+        <button class="btn btn-primary btn-md pull-right" wz-next
+                ng-disabled="!addContest.formGeneral.$valid">
+            Next step
+        </button>
+    </div>
+</div>

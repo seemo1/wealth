@@ -1,0 +1,110 @@
+<!--
+我是沒啥作用的搜尋列表
+<input type="text" class="form-control" placeholder="Search keyword" ng-model="contest.strFilter" >
+
+<br>
+
+語系顯示
+<form name="languageForm" >
+    <label class="radio-inline">
+        <input type="radio" ng-model="viewTag.languageShow" value="default">預設值
+    </label>
+    <label class="radio-inline">
+        <input type="radio" ng-model="viewTag.languageShow" value="tw">繁中
+    </label>
+    <label class="radio-inline">
+        <input type="radio" ng-model="viewTag.languageShow" value="en">英文
+    </label>
+    <label class="radio-inline">
+        <input type="radio" ng-model="viewTag.languageShow" value="cn">簡中
+    </label>
+</form>
+-->
+
+<div class="table-responsive">
+    <table class="table ">
+        <!-- 標題列 -->
+        <tr class="bg-primary">
+            <td class="table-small-row">備註</td>
+            <td>預設語系</td>
+            <td>比賽ID</td>
+            <td class="table-small-row">圖片</td>
+            <td class="table-small-row">比賽名稱</td>
+            <!--
+            <td class="table-small-row">Version</td>
+            -->
+            <td class="table-small-row">開始時間(GMT+0)</td>
+            <td class="table-small-row">結束時間(GMT+0)</td>
+            <td class="table-small-row">相關操作</td>
+        </tr>
+        <!-- 查詢後 - 實際內容 -->
+        <!-- | filter:contest.strFilter | orderBy: '-start_date_time' -->
+
+        <tr ng-repeat="contest in contestList  ">
+            <td>
+                <span>
+                    推薦比賽：{{ (contest.join_cond_enable == 'N' || ( contest.join_cond_school_key != '' || contest.join_cond_school_key != '' )) ? 'Yes' : 'No'}}
+                </span>
+                <br/>
+                <span>
+                    Free Contest：{{ contest.join_cond_enable == 'N' ? 'Yes' : 'No'}}
+                </span>
+                <br/>
+                <span>
+                    School Contest：{{ contest.join_cond_school_key != '' || contest.join_cond_school_key != '' ? 'Yes' : 'No'}}
+                </span>
+            </td>
+            <td class="table-small-row vertical-middle">
+                <span ng-if="contest.default_language == 'EN'">英文</span>
+                <span ng-if="contest.default_language == 'CN'">簡中</span>
+                <span ng-if="contest.default_language == 'TW'">繁中</span>
+            </td>
+            <td>{{contest.contest_id}}</td>
+            <td class="table-small-row vertical-middle">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <img ng-if="contest.default_language == 'EN'" class="img-responsive center-block" ng-src="{{contest.en_image}}"/>
+                        <img ng-if="contest.default_language == 'CN'" class="img-responsive center-block" ng-src="{{contest.cn_image}}"/>
+                        <img ng-if="contest.default_language == 'TW'" class="img-responsive center-block" ng-src="{{contest.tw_image}}"/>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <span ng-if="contest.default_language == 'EN'">{{contest.en_name}}</span>
+                <span ng-if="contest.default_language == 'CN'">{{contest.cn_name}}</span>
+                <span ng-if="contest.default_language == 'TW'">{{contest.tw_name}}</span>
+            </td>
+            <td>
+                {{contest.start_date_time}}
+                <!--{{ timeZone }} <br/>-->
+                <!--{{contest.start_unix_timestamp * 1000 | date : 'yyyy-MM-dd HH:mm:ss' }} <br/>-->
+                <!--{{contest.start_date_time  | date : 'yyyy-MM-dd HH:mm:ss' }}-->
+            </td>
+            <td>{{contest.end_date_time}}</td>
+            <td class="table-small-row vertical-middle">
+                <div ng-if="contest.is_new == 'Y' ">
+                    <a class="btn btn-primary"
+                       ng-if="contest.progress_status !== 'C'"
+                       ng-click="edit(contest.contest_id)" >編輯</a>
+                    <a class="btn btn-danger"
+                       ng-if="contest.progress_status === 'W'"
+                       ng-click="delete(contest.contest_id)" >刪除</a>
+                    <a class="btn btn-success"
+                       ng-if="contest.progress_status === 'W'"
+                       ng-click="publish(contest.contest_id)" >發佈</a>
+                    <a class="btn btn-success"
+                       ng-if="contest.progress_status !== 'W'"
+                       ng-click="behavior.memberClick(contest.contest_id, contestData.name, contest.default_language)" >查看參賽者</a>
+                </div>
+                <div ng-if="contest.is_new == 'N'">
+                   舊版比賽無法在此進行操作
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <!--&lt;!&ndash;  查詢後 - 提示訊息  &ndash;&gt;-->
+    <!--<div class="alert alert-info" ng-hide="contest.contestList.length > 0">-->
+        <!--<p>{{contest.loadingInfo}}</p>-->
+    <!--</div>-->
+</div>

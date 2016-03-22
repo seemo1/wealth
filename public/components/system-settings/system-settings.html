@@ -1,0 +1,74 @@
+<div ng-controller="SystemSettingsController as systemSettings" ng-init="systemSettings.getSettings()">
+    <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+            <h4 class="panel-title pull-left">System Settings</h4>
+            <a class="glyphicon link-no-style pull-right"
+               style="font-size:20px;"
+               ng-class="systemSettings.showAddSetting ? 'glyphicon-remove-circle' : 'glyphicon-plus-sign'"
+               ng-click="systemSettings.showAddSettingForm()"></a>
+        </div>
+
+        <div class="panel-body">
+            <div ng-show="!systemSettings.showAddSetting">
+                <input type="text"
+                       class="form-control"
+                       placeholder="Search keyword"
+                       ng-model="systemSettings.query" autofocus>
+                <br>
+                <small class="text-danger">Note: For security reason, RSA key is not listed</small>
+                <div class="table-responsive">
+                    <table class="table ">
+                        <tr class="bg-primary">
+                            <td class="table-small-row">Type</td>
+                            <td class="table-small-row">Key</td>
+                            <td class="table-medium-row">Value</td>
+                            <td class="table-small-row">Update Time</td>
+                            <td>Memo</td>
+                            <td class="text-center">Update</td>
+                        </tr>
+                        <tr ng-repeat="setting in systemSettings.settings | filter:systemSettings.query">
+                            <td class="table-small-row">{{setting.type}}</td>
+                            <td class="table-small-row">{{setting.key_code}}</td>
+                            <td class="table-medium-row"><input type="text" ng-model="setting.value" /></td>
+                            <!--<td class="table-medium-row">{{setting.value}}</td>-->
+                            <td class="table-small-row">{{setting.update_time}}</td>
+                            <td>{{setting.memo}}</td>
+                            <td class="text-center"><i class="glyphicon glyphicon-floppy-disk" ng-click="systemSettings.update($index)"></i></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div ng-show="systemSettings.showAddSetting">
+                <form name="systemSettings.formAddNewSetting" novalidate>
+                    <div class="input-group input-group-sm" ng-class="systemSettings.formAddNewSetting.type.$invalid ? 'has-error':'has-success'">
+                        <label for="type">Type</label>
+                        <input type="text" id="type" name='type'  class="form-control" ng-model="systemSettings.newSetting.type" placeholder="Type" required>
+                    </div>
+                    <div class="input-group input-group-sm" ng-class="systemSettings.formAddNewSetting.key_code.$invalid ? 'has-error':'has-success'">
+                        <label for="key">Key</label>
+                        <input type="text" id='key' name='key_code' class="form-control" ng-model="systemSettings.newSetting.key_code" placeholder="Key" required>
+                    </div>
+                    <div class="input-group"
+                         ng-class="systemSettings.formAddNewSetting.value.$invalid ? 'has-error':'has-success'">
+                        <label for="value">Value</label>
+                        <textarea type="text" id="value" name='value' class="form-control"
+                                  ng-model="systemSettings.newSetting.value"
+                                  rows="5" cols="35" style="resize:none;" placeholder="Value" required></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="note">Note</label>
+                        <textarea type="text" id="note" name='note' class="form-control"
+                                  ng-model="systemSettings.newSetting.memo"
+                                  rows="5" cols="35" style="resize:none;" placeholder="Note (Optional)"></textarea>
+                    </div>
+                    <br>
+                    <div ng-show='systemSettings.addSucceed' class="alert alert-success alert-dismissable" role="alert">
+                        <a class="link-no-style" ng-click="systemSettings.showAddSettingForm()"><strong>New system setting added!!</strong></a>
+                    </div>
+                    <button class="btn btn-success btn-block" ng-disabled="systemSettings.formAddNewSetting.$invalid" ng-click="systemSettings.saveNewSetting()" >Save new setting</button>
+                    <button class="btn btn-danger btn-block" ng-click="systemSettings.showAddSettingForm()">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

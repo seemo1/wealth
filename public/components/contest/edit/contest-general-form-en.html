@@ -1,0 +1,36 @@
+<form name="edit.formGeneral" novalidate>
+    <div class="form-group" ng-class="edit.formGeneral.name.$invalid ? 'has-error':'has-success'">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" name="name" id="name"
+               placeholder="Name" ng-model="edit.contest.name" required>
+    </div>
+    <div class="form-group"
+         ng-class="edit.formGeneral.title.$invalid ? 'has-error':'has-success'">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" name="title" id="title"
+               ng-model="edit.contest.title"
+               placeholder="Subtitle" required>
+    </div>
+    <div class="form-group"
+         ng-class="edit.formGeneral.minimumParticipant.$invalid ? 'has-error':'has-success'">
+        <label for="minimumParticipant">Minimum Participant (value 0 means no minimum participant to
+            start contest)</label>
+        <input type="text" class="form-control" name="minimumParticipant" id="minimumParticipant"
+               ng-model="edit.contest.reward_base_join_total"
+               placeholder="Minimum Participant" number-only required>
+    </div>
+    <div class="form-group"
+         ng-class="edit.formGeneral.description.$invalid ? 'has-error':'has-success'">
+        <label for="description">Description</label>
+                <textarea type="text" class="form-control" name="description" id="description"
+                          style="resize:none;"
+                          ng-model="edit.contest.description"
+                          placeholder="Description" required></textarea>
+    </div>
+    <div class="form-group">
+        <label for="icon_image">File input</label>
+        <input type="file" id="icon_image" name="icon_image"
+               custom-on-change="edit.contestIconChanged"
+               class="form-control">
+    </div>
+</form>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+        var isiPad = navigator.userAgent.match(/iPad/i) != null;
+        var isiPhone = navigator.userAgent.match(/iPhone/i) != null;
+        var isandroid = navigator.userAgent.match(/Android/i) != null;
+        var isfdt = (/fdt/ig).test(navigator.userAgent);
+
+        if (isandroid) {
+
+            if(!isfdt) {
+                setTimeout(function () {
+                    window.location = "http://incubator.fdt.io/";
+                }, 10000);
+            }
+            window.location = "forexmasterinccn://fdt.io/{{deepLink.android_path}}{% autoescape false %}{{queryString}}{% endautoescape %}";
+
+        } else if (isiPhone || isiPad) {
+
+            if(!isfdt) {
+                setTimeout(function () {
+                    window.location = "http://incubator.fdt.io/";
+                }, 10000);
+            }
+            window.location = "ForexMasterincCN://fdt/{{deepLink.ios_path}}{% autoescape false %}{{queryString}}{% endautoescape %}";
+
+        } else {
+            window.location = "http://incubator.fdt.io/";
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>

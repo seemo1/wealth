@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta content="width=device-width,user-scalable=no" name="viewport" />
+    <meta name="format-detection" content="telephone=no" />
+    <style>
+        body{background: #fbfcfc }
+        #wizard{width: 100%; height: 400px; background-size: 320px 400px; background-position: center top; background-repeat: no-repeat;}
+        .ioswizardopen{background-image:url("http://img.investmaster.cn/2016iosshare.png?v=1");}
+        .androidwizardopen{background-image:url("http://img.investmaster.cn/2016androidshare.png?v=1");}
+    </style>
+</head>
+<body>
+    <div id="wizard" class="wizard"></div>
+    <iframe id="dpLinkTo" style="display: none !important;"></iframe>
+    <script>
+        var isiPad = navigator.userAgent.match(/iPad/i) != null;
+        var isiPhone = navigator.userAgent.match(/iPhone/i) != null;
+        var isandroid = navigator.userAgent.match(/Android/i) != null;
+        var isWeixin = (/MicroMessenger/ig).test(navigator.userAgent);
+        var isQQ = (/qq/ig).test(navigator.userAgent);
+        var isWeibo = (/Weibo/ig).test(navigator.userAgent);
+        var isfdt = (/fdt/ig).test(navigator.userAgent);
+        var iframe = document.getElementById('dpLinkTo');
+
+        if (isandroid) {
+            document.getElementById("wizard").classList.add('androidwizardopen');
+        } else if (isiPhone || isiPad) {
+            document.getElementById("wizard").classList.add('ioswizardopen');
+        }
+
+        if(!isWeixin && !isQQ && !isWeibo) {
+            if (isandroid) {
+
+                if(!isfdt) {
+                    setTimeout(function () {
+                        window.location = "http://a.app.qq.com/o/simple.jsp?pkgname=com.hkfdt.cn.stock";
+                    }, 600);
+                }
+                iframe.src = "stockmastercn://fdt/{{deepLink.android_path}}{% autoescape false %}{{queryString}}{% endautoescape %}";
+
+            } else if (isiPhone || isiPad) {
+
+                if(!isfdt) {
+                    setTimeout(function () {
+                        window.location = "https://itunes.apple.com/us/app/gu-shi-cao-pan-shou/id1015766966";
+                    }, 600);
+                }
+                window.location = "StockMasterCN://fdt/{{deepLink.ios_path}}{% autoescape false %}{{queryString}}{% endautoescape %}";
+
+            } else {
+                window.location = "http://www.hkfdt.com/";
+            }
+        }
+    </script>
+</body>
+</html>

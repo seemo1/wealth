@@ -1,0 +1,15 @@
+dea/
+.DS_Store
+*.log
+*.heapsnapshot
+coverage.html
+*.iml
+node_modules/
+logs/
+config/undefined.json
+config/default.json
+public/*.zip
+public/*.pem
+public/mobile/styles/.sass-cache/
+public/bower_components/
+

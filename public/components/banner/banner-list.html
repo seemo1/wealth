@@ -1,0 +1,40 @@
+<div class="table-responsive">
+    <table class="table ">
+        <tr class="bg-primary">
+            <td><span class="glyphicon glyphicon-menu-hamburger"></span></td>
+            <!--<td class="table-medium-row">Banner Id</td>-->
+            <td class="table-medium-row">Image</td>
+            <td class="table-medium-row">iOS Link</td>
+            <td class="table-medium-row">Android Link</td>
+            <td class="table-small-row">Ordering</td>
+            <td class="table-small-row">Display</td>
+            <td class="table-small-row">Display Until</td>
+            <td class="table-small-row">Last Update Time</td>
+            <td class="table-small-row">Publish Time</td>
+        </tr>
+        <tr ng-repeat="banner in bannerCtrl.bannerList">
+            <td>
+                <a class="glyphicon glyphicon-pencil" aria-hidden="true"
+                   tooltip-placement="top" tooltip="Click to edit banner"
+                   ng-click="bannerCtrl.edit(banner.banner_id)" href="#"></a><br>
+                <a style="color:red" class="glyphicon glyphicon-trash" aria-hidden="true"
+                   tooltip-placement="bottom" tooltip="Click to delete banner"
+                   ng-click="bannerCtrl.delete(banner.banner_id)" href="#"></a>
+            </td>
+            <!--<td class="table-medium-row">{{banner.banner_id}}</td>-->
+            <td class="table-medium-row">
+                <img ng-src="{{banner.serving_url ? banner.serving_url : 'http://placehold.it/140x140'}}"
+                     class="img-responsive">
+            </td>
+            <td class="table-medium-row">{{banner.ios_link}}</td>
+            <td class="table-medium-row">{{banner.android_link}}</td>
+            <td class="table-small-row">{{banner.ordering}}</td>
+            <td class="table-small-row">
+                <span class="glyphicon {{banner.display ? 'glyphicon-ok text-success' : 'glyphicon-remove text-danger'}}" aria-hidden="true"></span>
+            </td>
+            <td class="table-small-row">{{banner.display_until ? bannerCtrl.convertTime(banner.display_until) : ''}}</td>
+            <td class="table-small-row">{{bannerCtrl.convertTime(banner.last_update_time)}}</td>
+            <td class="table-small-row">{{bannerCtrl.convertTime(banner.publish_time)}}</td>
+        </tr>
+    </table>
+</div>

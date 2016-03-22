@@ -1,0 +1,8 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="margin-top-small" ng-class="titleClass">{{title}}</div>
+        <div ng-repeat="contest in contests track by $index">
+            <contest-head-dir contest="contest" status="contest.status"></contest-head-dir>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+<br>
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="userId">Name</label>
+                <input type="text" class="form-control" id="userId" ng-model="fuel.logUserId" placeholder="User ID">
+            </div>
+            <button type="submit" class="btn btn-primary" ng-click="fuel.getLogs()">Check</button>
+            <span class="text-danger" ng-show="fuel.logNotFound">User not found!</span>
+        </form>
+        <br>
+        <table class="table table-responsive table-hover table-striped table-bordered" ng-show="fuel.logs.length > 0">
+            <tr>
+                <td align="center">Action Date</td>
+                <td align="center">Publish Time</td>
+                <td align="center">Action</td>
+                <td align="center">Point</td>
+                <td align="center">Score Sum</td>
+                <td align="center">Memo</td>
+                <td align="center">Area</td>
+                <td align="center">Product</td>
+            </tr>
+            <tr ng-repeat="log in fuel.logs">
+                <td align="center" ng-bind="log.action_date"></td>
+                <td align="center" ng-bind="log.publish_time"></td>
+                <td ng-bind="log.action_name"></td>
+                <td align="center" ng-bind="log.action_point"></td>
+                <td align="center" ng-bind="log.score_sum"></td>
+                <td ng-bind="log.memo"></td>
+                <td align="center" ng-bind="log.area"></td>
+                <td align="center" ng-bind="log.product"></td>
+            </tr>
+        </table>
+    </div>
+</div>

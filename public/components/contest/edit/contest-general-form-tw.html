@@ -1,0 +1,26 @@
+<form name="edit.formGeneralTw" novalidate>
+    <div class="form-group">
+        <label for="tw_name">比賽名稱</label>
+        <input type="text" class="form-control" name="tw_name" id="tw_name"
+               placeholder="比賽名稱" ng-model="edit.contest.tw_name">
+    </div>
+    <div class="form-group">
+        <label for="tw_title">比賽副標題</label>
+        <input type="text" class="form-control" name="tw_title" id="tw_title"
+               ng-model="edit.contest.tw_title"
+               placeholder="比賽副標題">
+    </div>
+    <div class="form-group">
+        <label for="tw_description">比賽介紹</label>
+                <textarea type="text" class="form-control" name="tw_description" id="tw_description"
+                          style="resize:none;"
+                          ng-model="edit.contest.tw_description"
+                          placeholder="比賽介紹"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="tw_icon_image">比賽圖片</label>
+        <input type="file" id="tw_icon_image" name="tw_icon_image"
+               custom-on-change="edit.contestIconChanged"
+               class="form-control">
+    </div>
+</form>

@@ -1,0 +1,42 @@
+'use strict';
+
+var htmlMsgKey = require('./htmlMsg-key');
+var htmlMsg = {};
+
+htmlMsg[htmlMsgKey.INBOX_FOLLOW.str] = '<b>{0}</b> started following you.';
+htmlMsg[htmlMsgKey.INBOX_LIKE.str] = '<b>{0}</b> liked your post: <b>{1}</b>';
+htmlMsg[htmlMsgKey.INBOX_COMMENT.str] = '<b>{0}</b> left a comment on your post.';
+htmlMsg[htmlMsgKey.INBOX_MENTIONPOST.str] = '<b>{0}</b> mentioned you in a post.';
+htmlMsg[htmlMsgKey.INBOX_MENTIONCOMMENT.str] = '<b>{0}</b> mentioned you in a comment.';
+htmlMsg[htmlMsgKey.INBOX_GROUPCREATED.str] = '<b>{0}</b> created a group <b>{1}</b>.';
+htmlMsg[htmlMsgKey.INBOX_INVITE.str] = '<b>{0}</b> invited you to join the group <b>{1}</b>.';
+htmlMsg[htmlMsgKey.INBOX_ACCEPTED.str] = '<b>{0}</b> accepted your invitation to join the group <b>{1}</b>.';
+htmlMsg[htmlMsgKey.INBOX_KICKED.str] = '';
+htmlMsg[htmlMsgKey.INBOX_GROUPDELETED.str] = '<b>{0}</b> deleted the group <b>{1}</b>.';
+htmlMsg[htmlMsgKey.INBOX_POSTGROUP.str] = '<b>{0}</b> just made a post in <b>{1}</b>.';
+htmlMsg[htmlMsgKey.INBOX_CONTEST_PERFORMANCE.str] = '<b>{0}</b> Current Top 3: \n1st: <b>{1}</b>, <b>{2}</b> {3} \n2nd: <b>{4}</b>, {5} {6} \n3rd: <b>{7}</b>, {8} {9}';
+htmlMsg[htmlMsgKey.INBOX_REQUESTTOJOIN.str] = '<b>{0}</b> requested to join the group <b>{1}</b>.';
+htmlMsg[htmlMsgKey.INBOX_APPROVETOJOIN.str] = '<b>{0}</b> approved your request to join the group <b>{1}</b>.';
+htmlMsg[htmlMsgKey.INBOX_ECONCALENDAR.str] = '[{0}] <b>{1}</b> will be released at <b>{2}</b>';
+htmlMsg[htmlMsgKey.INBOX_COMMENTLIKE.str] = '<b>{0}</b> liked your comment: <b>{1}</b>';
+htmlMsg[htmlMsgKey.INBOX_TOP_PERFORMANCE.str] = 'Great job! You are currently in the top <b>{1}</b> of the <b>{0}</b>';
+htmlMsg[htmlMsgKey.INBOX_CONTEST_FINAL_RANKING.str] = 'Congratulations! Final Top 3 of <b>{0}</b>: \n1st: <b>{1}</b>, <b>{2}</b> {3}, win {4}{5} \n2nd: <b>{6}</b>, {7} {8}, win {9}{10} \n3rd: <b>{11}</b>, {12} {13}, win {14}{15}';
+htmlMsg[htmlMsgKey.INBOX_CONTEST_CANCELLED.str] = 'Sorry, <b>{0}</b> has been cancelled.';
+htmlMsg[htmlMsgKey.INBOX_CONTEST_ACTIVATED.str] = '<b>{0}</b> is activated! It will start on <b>{1}</b>.';
+htmlMsg[htmlMsgKey.INBOX_CONTEST_NEED_PEOPLE.str] = 'You are almost there! Only <b>{0}</b> more people needed to activate <b>{1}</b>.';
+htmlMsg[htmlMsgKey.INBOX_CONTEST_START_SOON.str] = '<b>{0}</b> starts tomorrow! Good luck!';
+htmlMsg[htmlMsgKey.INBOX_CONTEST_END_SOON.str] = '<b>{0}</b> ends in <b>{1}</b> day(s). Good luck!';
+htmlMsg[htmlMsgKey.INBOX_CONTEST_INVITATION.str] = '<b>{0}</b> invited you to join the contest <b>{1}</b>.';
+htmlMsg[htmlMsgKey.REFERRAL_INVALID_CODE.str] = 'Your code is invalid, please try again.';
+htmlMsg[htmlMsgKey.REFERRAL_MUTUAL_INVITE.str] = 'You already invited <b>{0}</b> to join, try another one!';
+htmlMsg[htmlMsgKey.REFERRAL_INVITE_SELF.str] = 'You cannot invite yourself';
+htmlMsg[htmlMsgKey.REFERRAL_CONFIRMED.str] = 'Your referral code has been confirmed by <b>{0}</b>. Now you get {1} coin in your account!';
+htmlMsg[htmlMsgKey.FUEL_EXCHANGE.str] = 'Good job! Your FDT Fuel score is above <b>{0}</b>! You can now exchange <b>{1}</b> fuel points for 1 coin.';
+htmlMsg[htmlMsgKey.FUEL_FULL.str] = 'Wow! Your FDT Fuel is full! Exchange for coins now!';
+htmlMsg[htmlMsgKey.FUEL_LOW.str] = 'Your FDT Fuel is almost consumed. Make trades or post on “Timelines” to gain more Fuel now!';
+htmlMsg[htmlMsgKey.SCHOOL_PASS.str] = 'Your student ID is verified!';
+htmlMsg[htmlMsgKey.SCHOOL_REJECTED.str] = 'Your student ID is invalid or inconsistent with the format, please re-upload or contact customer service staff. (Please verify your student ID ASAP in order to appear on the ranking list when you participate in a campus contest.)';
+htmlMsg[htmlMsgKey.SCHOOL_REMIND.str] = 'Your student ID will be expiring soon, please upload your new student ID as soon as possible.';
+htmlMsg[htmlMsgKey.SCHOOL_EXPIRED.str] = 'Your student ID has expired, please upload a new student ID. (Please verify your student ID again ASAP in order to appear on the ranking list when you participate in a campus contest.)';
+
+module.exports = htmlMsg;

@@ -1,0 +1,223 @@
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.5.0/angular-material-icons.min.js"></script>
+<!--<div ng-controller="GroupController as group" ng-init="group.getGroup()">-->
+<div ng-controller="GroupController as group">
+    <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+            <a class="glyphicon glyphicon-refresh link-no-style pull-left"
+               tooltip="Refresh group list" ng-click="group.getGroup()"></a>
+            <h4 class="panel-title pull-left">&nbsp;&nbsp;Group</h4>
+            <a class="glyphicon link-no-style pull-right"
+               style="font-size:20px;"
+               ng-class="group.showAddGroup ? 'glyphicon-remove-circle' : 'glyphicon-plus-sign'"
+               ng-click="group.showAddGroupForm()"></a>
+        </div>
+        <div class="panel-body">
+            <div ng-hide="group.showAddGroup">
+                <form class="form-inline" type="multipart/form-data" name="group.searchGroupFrom" ng-submit="group.searchGroup()">
+                    <div class="form-group">
+                        <select ng-model="group.searchGroupFrom.type" class="form-control">
+                            <option value='' disabled selected style='display:none;'>Please Choose Type</option>
+                            <option value ="public">Public</option>
+                            <option value ="school">School</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-success">Search</button>
+                    <div class="alert alert-danger" ng-show="group.error">{{group.message}}</div>
+                </form>
+                <br>
+                <div class="table-responsive">
+                    <table class="table text-center">
+                        <tr class="bg-primary">
+                            <td><span class="glyphicon glyphicon-menu-hamburger"></span></td>
+                            <td class="table-medium-row">Group ID</td>
+                            <td>Image</td>
+                            <td class="table-small-row">Group Name</td>
+                            <td class="table-small-row">Member List</td>
+                            <td class="table-small-row">Request List</td>
+                            <td class="table-medium-row">Invite List</td>
+                        </tr>
+                        <tr ng-repeat="groupInfo in group.groupList | filter:query">
+                            <td>
+                                <a class="glyphicon glyphicon-pencil" aria-hidden="true"
+                                   tooltip-placement="top" tooltip="Click to edit group"
+                                   ng-click="group.edit(groupInfo.group_id)"></a><br>
+                                <a style="color:red" class="glyphicon glyphicon-trash" aria-hidden="true"
+                                   tooltip-placement="bottom" tooltip="Click to delete group"
+                                   ng-click="group.delete(groupInfo.group_id)"></a>
+                                <a class="icon-user-plus icon-color-green" aria-hidden="true"
+                                   tooltip-placement="bottom" tooltip="Click to add member"
+                                   ng-click="group.addGroupMember(groupInfo.group_id)"></a>
+                                <a class="icon-user-times icon-color-green" aria-hidden="true"
+                                   tooltip-placement="bottom" tooltip="Click to del member"
+                                   ng-click="group.subGroupMember(groupInfo.group_id)"></a>
+                            </td>
+                            <td class="table-medium-row">{{groupInfo.group_id}}</td>
+                            <td class="table-small-row">
+                                <img ng-src="{{groupInfo.serving_url ? groupInfo.serving_url : 'http://placehold.it/140x140'}}"
+                                     class="img-responsive">
+                            </td>
+                            <td class="table-small-row">{{groupInfo.name}}</td>
+                            <td class="table-small-row">{{groupInfo.member_userids}}</td>
+                            <td class="table-small-row">{{groupInfo.requested_userids}}</td>
+                            <td class="table-medium-row">{{groupInfo.invited_userids}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div ng-show="group.showAddGroup">
+                <form name="group.formAddNewGroup" ng-submit="group.saveNewGroup()">
+                    <div class="input-group input-group-sm col-xs-8"
+                         ng-class="group.formAddNewGroup.name.$invalid ? 'has-error':'has-success'">
+                        <label for="name">Group Name</label>
+                        <input type="text" id="name" name='name' class="form-control"
+                               ng-model="group.newGroup.name" placeholder="Group Name" ng-blur="group.nameChange()" required>
+                    </div>
+                    <div class="input-group input-group-sm col-xs-8"
+                         ng-class="group.formAddNewGroup.userid.$invalid ? 'has-error':'has-success'">
+                        <label for="creatorId">Creator ID</label>
+                        <input type="text" id='creatorId' name='creatorId' class="form-control"
+                               ng-model="group.newGroup.create_userid" placeholder="creator ID" required>
+                    </div>
+                    <div class="input-group input-group-sm col-xs-8">
+                        <label for="type">Type</label>
+                        <select ng-model="group.newGroup.type" class="form-control" id="type" required>
+                            <option value ="public">Public</option>
+                            <option value ="school">School</option>
+                        </select>
+                    </div>
+                    <div class="input-group col-xs-8">
+                        <label for="description">Description</label>
+                            <textarea type="text" id="description" name='description' class="form-control"
+                                      ng-model="group.newGroup.description" rows="5" cols="35" style="resize:none;"
+                                      placeholder="Group Description"></textarea>
+                    </div>
+                    <div class="input-group input-group-sm col-xs-8">
+                        <label for="imgFile">Image</label>
+                        <input type="file" id="imgFile" upload-file="imgFile" class="form-control">
+                    </div>
+                    <div class="input-group input-group-sm col-xs-8">
+                        <label for="bgImgFile">Background Image</label>
+                        <input type="file" id="bgImgFile" upload-file="bgImgFile" class="form-control">
+                    </div>
+                    <br>
+                    <div ng-show='group.addSucceed' class="alert alert-success alert-dismissable" role="alert">
+                        <a class="link-no-style" ng-click="group.showAddGroupForm()"><strong>New group
+                            added!!</strong></a>
+                    </div>
+                    <button class="btn btn-success btn-block" ng-disabled="group.formAddNewGroup.name.$dirty && group.formAddNewGroup.name.$invalid || group.formAddNewGroup.$invalid">Create new
+                        group
+                    </button>
+                    <button class="btn btn-danger btn-block" ng-click="group.showAddGroupForm()">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal edit group -->
+<script type="text/ng-template" id="edit-group.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Edit Group - [{{editGroup.group.name}}]</h3>
+    </div>
+    <div class="modal-body">
+        <form name="editGroup.formEditGroup" novalidate>
+            <div class="input-group input-group-sm col-xs-8"
+                 ng-class="editGroup.formEditGroup.editGroupId.$invalid ? 'has-error':'has-success'">
+                <label for="editGroupId">Group Id</label>
+                <input type="text" id='editGroupId' name='editGroupId' class="form-control"
+                       ng-model="editGroup.group.group_id" placeholder="群組ID" required ng-disabled="true">
+            </div>
+            <div class="input-group input-group-sm col-xs-8"
+                 ng-class="editGroup.formEditGroup.editName.$invalid ? 'has-error':'has-success'">
+                <label for="editName">Name</label>
+                <input type="text" id="editName" name='editName' class="form-control"
+                       ng-model="editGroup.group.name" placeholder="群組名稱" required>
+            </div>
+            <div class="input-group input-group-sm col-xs-8">
+                <label for="editCreatorId">Creator ID</label>
+                <input type="text" id="editCreatorId" name='editCreatorId' class="form-control"
+                       ng-model="editGroup.group.create_userid" placeholder="創造群組使用者" required>
+            </div>
+            <div class="input-group input-group-sm col-xs-8">
+                <label for="editType">Type</label>
+                <select ng-model="editGroup.group.type" class="form-control" id="editType">
+                    <option value ="public">Public</option>
+                    <option value ="school">School</option>
+                </select>
+            </div>
+            <div class="input-group col-xs-8">
+                <label for="editMember">Member</label>
+                <textarea type="text" id="editMember" name='editMember' class="form-control"
+                          ng-model="editGroup.group.member_userids" rows="5" cols="35" ng-disabled="true"></textarea>
+            </div>
+            <div class="input-group col-xs-10">
+                <label for="editRequested">Requested Users</label>
+                <textarea type="text" id="editRequested" name='editRequested' class="form-control"
+                          ng-model="editGroup.group.requested_userids" rows="5" cols="35" ng-disabled="true"></textarea>
+            </div>
+            <div class="input-group col-xs-10">
+                <label for="editInvited">Invited User</label>
+                <textarea type="text" id="editInvited" name='editInvited' class="form-control"
+                          ng-model="editGroup.group.invited_userids" rows="5" cols="35" ng-disabled="true"></textarea>
+            </div>
+            <div class="input-group col-xs-10">
+                <label for="editDescription">Description</label>
+                <textarea type="text" id="editDescription" name='editDescription' class="form-control"
+                          ng-model="editGroup.group.description" rows="5" cols="35" style="resize:none;"
+                          placeholder="Group Description"></textarea>
+            </div>
+            <div class="input-group input-group-sm">
+                <label for="editImgFile">Image</label>
+                <input type="file" id="editImgFile" upload-file="editImgFile" class="form-control">
+            </div>
+            <div class="input-group input-group-sm">
+                <label for="editBGImgFile">Background Image</label>
+                <input type="file" id="editBGImgFile" upload-file="editBGImgFile" class="form-control">
+            </div>
+        </form>
+        <div class="alert alert-danger" ng-show="editGroup.error">Cannot update group. Please try again or contact ??</div>
+        <div class="alert alert-success" ng-show="editGroup.editSucceed">Group updated!</div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-block" ng-click="editGroup.save()" ng-disabled="editGroup.updating">Save</button>
+        <a class="btn btn-danger btn-block" ng-click="editGroup.cancel()">Close</a>
+    </div>
+</script>
+
+<script type="text/ng-template" id="add-member.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Add Group Member - [{{addGroupMember.group.name}}]</h3>
+    </div>
+    <div class="modal-body">
+        <form name="addGroupMember.formAddGroupMember" novalidate>
+            <textarea type="text" id="addGroupMember" name='addGroupMember' class="form-control"
+                      ng-model="addGroupMember.group.member" rows="5" cols="35" style="resize:none;"
+                      placeholder="Add Group Member"></textarea>
+        </form>
+    </div>
+    <div class="alert alert-danger" ng-show="addGroupMember.error">{{addGroupMember.message}}</div>
+    <div class="alert alert-success" ng-show="addGroupMember.editSucceed">{{addGroupMember.message}}</div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-block" ng-click="addGroupMember.save()" ng-disabled="addGroupMember.updating">Save</button>
+        <a class="btn btn-danger btn-block" ng-click="addGroupMember.cancel()">Close</a>
+    </div>
+</script>
+
+<script type="text/ng-template" id="sub-member.html">
+    <div class="modal-header">
+        <h3 class="modal-title">SUB Group Member - [{{subGroupMember.group.name}}]</h3>
+    </div>
+    <div class="modal-body">
+        <form name="subGroupMember.formSubGroupMember" novalidate>
+            <textarea type="text" id="subGroupMember" name='subGroupMember' class="form-control"
+                      ng-model="subGroupMember.group.member" rows="5" cols="35" style="resize:none;"
+                      placeholder="Sub Group Member"></textarea>
+        </form>
+    </div>
+    <div class="alert alert-danger" ng-show="subGroupMember.error">{{subGroupMember.message}}</div>
+    <div class="alert alert-success" ng-show="subGroupMember.editSucceed">{{subGroupMember.message}}</div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-block" ng-click="subGroupMember.save()" ng-disabled="subGroupMember.updating">Save</button>
+        <a class="btn btn-danger btn-block" ng-click="subGroupMember.cancel()">Close</a>
+    </div>
+</script>

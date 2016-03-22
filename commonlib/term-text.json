@@ -1,0 +1,25 @@
+{
+  "auth_token": "使用者登入成功後的權證，含使用者id，國家，語系",
+  "hits": "每頁的資料筆數",
+  "offset": "從第幾筆開始取資料",
+  "msg": "貼文訊息內容",
+  "imageUrl": "圖片網址",
+  "query": "要查詢的文字",
+  "post_id": "貼文的識別碼，post identifier (TimeUuid)",
+  "group_id": "群組識別碼，group identifier (Uuid)",
+  "comment_id": "評論識別碼，comment identifier",
+  "comment": "評論的內容",
+  "user_id": "使用者識別碼，user identifier",
+  "username": "使用者名稱或暱稱",
+  "publish_time": "發表時間，創立時間",
+  "publish_time_gmt": "GMT 發表時間，創立時間",
+  "last_update_time": "最後更新時間",
+  "last_update_time_gmt": "GMT 最後更新時間",
+  "code": "結果代碼 result number: 200=ok, 400=error, 500=operational error",
+  "error_code": "錯誤代碼 error code in define/errorcode",
+  "error_msg": "錯誤訊息 error message",
+  "cursor": "上次資料庫存取游標值",
+  "has_more": "還有更多資料可讀取",
+  "img_url": "上傳OSS的圖檔檔名"
+
+}

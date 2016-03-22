@@ -1,0 +1,138 @@
+<div ng-controller="DeepLinkController as deepLink" ng-init="deepLink.getLinks()">
+    <div class="panel panel-default">
+        <div class="panel-heading clearfix">
+            <a class="glyphicon glyphicon-refresh link-no-style pull-left"
+               tooltip="Refresh deep link list" ng-click="deepLink.getLinks()" href="#"></a>
+            <h4 class="panel-title pull-left">&nbsp;&nbsp;Deep Links</h4>
+            <a class="glyphicon link-no-style pull-right"
+               style="font-size:20px;"
+               ng-class="deepLink.showAddDeepLink ? 'glyphicon-remove-circle' : 'glyphicon-plus-sign'"
+               href="#"
+               ng-click="deepLink.showAddForm()"></a>
+        </div>
+        <div class="panel-body">
+            <div ng-hide="deepLink.showAddDeepLink">
+                <form class="form-inline" type="multipart/form-data">
+                    <div class="form-group">
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Link"
+                               ng-model="deepLink.query.link" autofocus>
+                    </div>
+                    <div class="form-group">
+                        <input type="text"
+                               class="form-control"
+                               placeholder="iOS Path"
+                               ng-model="deepLink.query.iosPath">
+                    </div>
+                    <div class="form-group">
+                        <input type="text"
+                               class="form-control"
+                               placeholder="Android Path"
+                               ng-model="deepLink.query.androidPath">
+                    </div>
+                </form>
+                <br>
+                <br>
+                <div class="table-responsive">
+                    <table class="table ">
+                        <tr class="bg-primary">
+                            <td><span class="glyphicon glyphicon-menu-hamburger"></span></td>
+                            <td class="table-medium-row">Link</td>
+                            <td class="table-medium-row">iOS Path</td>
+                            <td class="table-medium-row">Android Path</td>
+                            <td class="table-small-row">Count</td>
+                            <td class="table-small-row">Last Update Time</td>
+                            <td class="table-small-row">Publish Time</td>
+                        </tr>
+                        <tr ng-repeat="deelLinkInfo in deepLink.deepLinkList | filter:deepLink.query.link | filter:deepLink.query.iosPath | filter:deepLink.query.androidPath | orderBy: 'link' ">
+                            <td>
+                                <a class="glyphicon glyphicon-pencil" aria-hidden="true"
+                                   tooltip-placement="top" tooltip="Click to edit link"
+                                   ng-click="deepLink.edit(deelLinkInfo.link)" href="#"></a><br>
+                                <a style="color:red" class="glyphicon glyphicon-trash" aria-hidden="true"
+                                   tooltip-placement="bottom" tooltip="Click to delete link"
+                                   ng-click="deepLink.delete(deelLinkInfo.link)" href="#"></a>
+                            </td>
+                            <td class="table-medium-row">{{deelLinkInfo.link}}</td>
+                            <td class="table-medium-row">{{deelLinkInfo.ios_path}}</td>
+                            <td class="table-medium-row">{{deelLinkInfo.android_path}}</td>
+                            <td class="table-small-row">{{deelLinkInfo.count}}</td>
+                            <td class="table-small-row">{{deepLink.convertTime(deelLinkInfo.last_update_time)}}</td>
+                            <td class="table-small-row">{{deepLink.convertTime(deelLinkInfo.publish_time)}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div ng-show="deepLink.showAddDeepLink">
+                <form name="deepLink.formAddNewLink" ng-submit="deepLink.saveNewLink()">
+                    <div class="input-group input-group-sm col-xs-8"
+                         ng-class="deepLink.formAddNewLink.link.$invalid ? 'has-error':'has-success'">
+                        <label for="link">Link</label>
+                        <input type="text" id="link" name='link' class="form-control"
+                               ng-model="deepLink.newLink.link" placeholder="Link" required>
+                    </div>
+                    <div class="input-group input-group-sm col-xs-8"
+                         ng-class="deepLink.formAddNewLink.iosPath.$invalid ? 'has-error':'has-success'">
+                        <label for="iosPath">iOS Path</label>
+                        <input type="text" id='iosPath' name='iosPath' class="form-control"
+                               ng-model="deepLink.newLink.iosPath" placeholder="iOS Path" required>
+                    </div>
+                    <div class="input-group input-group-sm col-xs-8"
+                         ng-class="deepLink.formAddNewLink.androidPath.$invalid ? 'has-error':'has-success'">
+                        <label for="androidPath">Android Path</label>
+                        <input type="text" id='androidPath' name='androidPath' class="form-control"
+                               ng-model="deepLink.newLink.androidPath" placeholder="Android Path" required>
+                    </div>
+                    <br>
+                    <div ng-show='deepLink.addSucceed' class="alert alert-success alert-dismissable" role="alert">
+                        <a class="link-no-style" ng-click="deepLink.showAddForm()"><strong>New link
+                            added!!</strong></a>
+                    </div>
+                    <button class="btn btn-success btn-block" ng-disabled="deepLink.formAddNewLink.$invalid">Create new
+                        link
+                    </button>
+                    <button class="btn btn-danger btn-block" ng-click="deepLink.showAddForm()">Close</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal edit school -->
+<script type="text/ng-template" id="edit-deep-link.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Edit {{editDeepLink.deepLink.link}}</h3>
+    </div>
+    <div class="modal-body">
+        <form name="editDeepLink.formEditDeepLink" novalidate>
+            <div class="input-group input-group-sm"
+                 ng-class="editDeepLink.formEditDeepLink.link.$invalid ? 'has-error':'has-success'">
+                <label for="editLink">Link</label>
+                <input type="text" id='editLink' name='link' class="form-control"
+                       ng-model="editDeepLink.deepLink.link" placeholder="Link" required ng-disabled="true">
+            </div>
+            <div class="input-group input-group-sm"
+                 ng-class="editDeepLink.formEditDeepLink.iosPath.$invalid ? 'has-error':'has-success'">
+                <label for="editIosPath">iOS Path</label>
+                <input type="text" id="editIosPath" name='iosPath' class="form-control"
+                       ng-model="editDeepLink.deepLink.ios_path" placeholder="iOS Path" required>
+            </div>
+            <div class="input-group input-group-sm"
+                 ng-class="editDeepLink.formEditDeepLink.androidPath.$invalid ? 'has-error':'has-success'">
+                <label for="editAndroidPath">Android Path</label>
+                <input type="text" id="editAndroidPath" name='androidPath' class="form-control"
+                       ng-model="editDeepLink.deepLink.android_path" placeholder="Android Path" required>
+            </div>
+        </form>
+        <div class="alert alert-danger" ng-show="editDeepLink.error">Cannot update link. Please try again or contact Seemo xP</div>
+        <div class="alert alert-success" ng-show="editDeepLink.editSucceed">Link updated!</div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary btn-block" ng-click="editDeepLink.save()" ng-disabled="editDeepLink.updating">Save</button>
+        <a class="btn btn-danger btn-block" ng-click="editDeepLink.cancel()">Close</a>
+    </div>
+</script>

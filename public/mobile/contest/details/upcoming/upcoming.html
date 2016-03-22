@@ -1,0 +1,39 @@
+<div class="app-body-inner-mt-0">
+    <div class="row animated slideInRight">
+        <div class="col-xs-12">
+            <details-head-dir contest="upcomingCtrl.contestDetail" shared="false"></details-head-dir>
+            <prize-dir content="upcomingCtrl.contestDetail.reward_description"></prize-dir>
+            <div class="row" ng-if="upcomingCtrl.contestDetail.is_dynamic_reward">
+                <dynamic-reward-dir max-money="upcomingCtrl.contestDetail.dynamic_reward_max_money"
+                                    rise-money="upcomingCtrl.contestDetail.dynamic_reward_rise_money"
+                                    current-money="upcomingCtrl.contestDetail.current_money"
+                                    coin-mark="upcomingCtrl.contestDetail.coin_mark"></dynamic-reward-dir>
+            </div>
+            <div class="row b-t b-b margin-top-small" ng-click="upcomingCtrl.goApplied()">
+                <div class="col-xs-12">
+                    <div class="box p-a">
+                        {{::upcomingCtrl.lang.APPLIED}}
+                        <a class="pull-right">
+                            {{upcomingCtrl.contestDetail.user_join_sum}}&nbsp;&nbsp;{{::upcomingCtrl.lang.PEOPLE}} &nbsp;&nbsp; <i
+                                class="fa  fa-angle-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <contest-rule-dir contest="upcomingCtrl.contestDetail">
+            </contest-rule-dir>
+        </div>
+    </div>
+</div>
+<div class="app-footer">
+    <div class="row animated slideInRight">
+        <div class="col-xs-12">
+            <div class="box p-a-custom-sm text-center grey-500 no-margin-bottom b-b join-block">
+                <a class="btn btn-block custom-color" ng-if="!upcomingCtrl.joinStatus"
+                   ng-href="{{upcomingCtrl.joinUrl}}">{{::upcomingCtrl.lang.JOIN_NOW}}</a>
+                    <span class="btn btn-block grey-400 text-white"
+                          ng-if="upcomingCtrl.joinStatus">{{::upcomingCtrl.lang.APPLIED}}</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,1225 @@
+<!--<script type="text/ng-template" id="one.html">-->
+    <!--<div>This is first template</div>-->
+<!--</script>-->
+<script type="text/ng-template" id="main.html">
+
+    <nav-dir title="contestCtrl.language.NAV_TITLE" deeplink="contestCtrl.deeplink"></nav-dir>
+    <div class="app-body-inner-mb-0">
+        <div class="animated slideInRight">
+            <banner-dir image="{{contestCtrl.banner.top.content}}"
+                        ng-if="contestCtrl.joinedContest.length > 0 || contestCtrl.suggestedContest.length > 0">
+            </banner-dir>
+            <bulletin-list-dir bulletins="contestCtrl.bulletins"></bulletin-list-dir>
+            <list-dir contests="contestCtrl.joinedContest" ng-if="contestCtrl.joinedContest.length > 0"></list-dir>
+            <list-dir contests="contestCtrl.suggestedContest"
+                      ng-if="contestCtrl.suggestedContest.length > 0"></list-dir>
+            <div class="row margin-top-small margin-bottom-small"
+                 ng-if="contestCtrl.joinedContest.length < 1 && contestCtrl.suggestedContest.length < 1">
+                <div class="col-xs-12">
+                    <div class="box text-center">
+                        <div class="item">
+                            <img ng-src="{{contestCtrl.emptyContestBannerSrc}}" class="w-full banner-no-contest">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="list-group">
+                        <a ui-sref="list" class="list-group-item">
+                            <span class="pull-right"><i class="fa fa-angle-right"></i></span>
+                            {{::contestCtrl.language.ALL_CONTEST}}
+                        </a>
+                        <a ui-sref="user" class="list-group-item">
+                            <span class="pull-right"><i class="fa fa-angle-right text-4x"></i></span>
+                            {{::contestCtrl.language.MY_CONTEST}}
+                        </a>
+                        <a ui-sref="rules" class="list-group-item">
+                            <span class="pull-right"><i class="fa fa-angle-right text-4x"></i></span>
+                            {{::contestCtrl.language.CAMPUS_CONTEST_RULES}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="all-contest.html">
+    <nav-dir title="listAllCtrl.lang.ALL_CONTEST"></nav-dir>
+    <div class="clearfix nav-active-success sticky-sub-nav grey-300">
+        <ul class="nav nav-md row" ui-nav="" ng-if="listAllCtrl.availableMarkets.length > 1">
+            <li class="nav-item text-center {{listAllCtrl.rowClass}}"
+                ng-repeat="market in listAllCtrl.availableMarkets"
+                ng-class="{'active': listAllCtrl.selectedMarket === market}">
+                <a class="nav-link block" href="" ng-click="listAllCtrl.switchMarket(market)">
+                    {{::listAllCtrl.lang[market]}}
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="app-body-inner-mb-0 body-has-sub-nav">
+        <div class="row animated slideInRight"
+             lazy-scroll="listAllCtrl.loadMore()"
+             lazy-scroll-trigger="100"
+             lazy-no-scroll="listAllCtrl.loading || listAllCtrl.noMore">
+            <div class="col-xs-12">
+                <div>
+                    <list-dir contests="listAllCtrl.contests"></list-dir>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="banner.html">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box text-center">
+                <div class="item">
+                    <img ng-src="{{image}}" class="w-full">
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="bulletin.html">
+    <nav-dir title="bulletinCtrl.title"></nav-dir>
+    <div class="app-body-inner-mb-0">
+        <div class="row animated slideInRight">
+            <div class="col-xs-12">
+                <div class="row margin-top-small">
+                    <div class="col-xs-12">
+                        <div class="list box">
+                            <div class="list-item" ng-repeat="bulletin in bulletinCtrl.bulletins track by $index">
+                                <a ng-href="{{bulletin.link}}" target="_blank" class="_500">
+                                    <div class="list-body">
+                                        <span ng-bind="bulletin.title"></span>
+                                        <small class="block text-muted"
+                                               ng-bind="bulletin.date * 1000 | date :'yyyy-MM-dd'"></small>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="bulletin-list.html">
+    <div class="row margin-top-small b-b b-t" ng-if="bulletins.length > 0">
+        <div class="col-xs-12">
+            <div class="box p-a">
+                <div class="row">
+                    <div class="col-xs-1">
+                    <span class="pull-left">
+                        <i class="material-icons text-4x text-gold">&#xe050;</i>
+                    </span>
+                    </div>
+                    <div class="col-xs-10">
+                        <div class="marquee">
+                            <span ng-repeat="bulletin in bulletins track by $index" ng-bind="bulletin.title"></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-1">
+                        <a ui-sref="bulletin">
+                        <span class="pull-right">
+                            <i class="fa fa-ellipsis-h text-4x"></i>
+                        </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="contest-rule.html">
+    <div class="row margin-top-small margin-bottom-small">
+        <div class="col-xs-12">
+            <div class="box p-a-md">
+                {{::lang.CONTEST_RULES}}<br><br>
+
+                <div ng-if="minParticipant">
+                    {{::lang.ACTIVATION_NUMBER}}:<br>
+                    {{::minParticipant}} {{::lang.PARTICIPANT}} {{::joinedParticipant}} {{::lang.HAVE_APPLIED}}<br><br>
+                </div>
+                {{::lang.CONTEST_DURATION}}：<br>
+                {{::formattedStartTime}} {{::lang.TO}} {{::formattedEndTime}}
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="ongoing.html">
+    <div class="app-body-inner-mt-0">
+        <div class="row animated slideInRight">
+            <div class="col-xs-12">
+                <details-head-dir contest="ongoingCtrl.contestDetail" shared="false"></details-head-dir>
+                <div class="alert alert-kicked no-margin-bottom margin-top-small"
+                     ng-if="ongoingCtrl.contestDetail.isKicked">
+                    <i class="fa fa-warning text-white"></i> You have lost more than
+                    {{::ongoingCtrl.contestDetail.stop_lose_setting}}%, so you have been withdrawn from the contest
+                </div>
+                <performance-chart-dir
+                        ng-if="ongoingCtrl.userPerformance.fdt_score"
+                        data="ongoingCtrl.performanceData"
+                        user-performance="ongoingCtrl.userPerformance"
+                        ranking="ongoingCtrl.userPerformance.fdt_ranking"
+                        score="ongoingCtrl.userPerformance.fdt_score"
+                        roi="ongoingCtrl.userPerformance.roi"
+                        ng-if="ongoingCtrl.contestDetail.join_status"></performance-chart-dir>
+                <prize-dir content="ongoingCtrl.contestDetail.reward_description"></prize-dir>
+                <top-performer-dir
+                        ng-if="ongoingCtrl.topPerformers.length > 0"
+                        participants="ongoingCtrl.topPerformers"
+                        title="{{::ongoingCtrl.lang.TOP_PERFORMER}}"
+                        state="ongoingCtrl.topPerformersState"
+                        contest-id="ongoingCtrl.contestDetail.contest_id"
+                        daily="false"
+                        total-users="3010">
+                </top-performer-dir>
+                <top-performer-dir
+                        ng-if="ongoingCtrl.dailyTopPerformers.length > 0"
+                        participants="ongoingCtrl.dailyTopPerformers"
+                        title="{{::ongoingCtrl.lang.DAILY_PERFORMER}}"
+                        state="ongoingCtrl.dailyTopPerformersState"
+                        contest-id="ongoingCtrl.contestDetail.contest_id"
+                        daily="true"
+                        total-users="2938">
+                </top-performer-dir>
+                <contest-rule-dir joined-participant="{{ongoingCtrl.contestDetail.user_join_sum}}"
+                                  min-participant="{{ongoingCtrl.contestDetail.min_user_settings}}"
+                                  start-time="ongoingCtrl.contestDetail.start_date_time"
+                                  end-time="ongoingCtrl.contestDetail.end_date_time">
+
+                </contest-rule-dir>
+            </div>
+        </div>
+    </div>
+    <div class="app-footer">
+        <div class="row animated slideInRight">
+            <div class="col-xs-12">
+                <div class="box p-a-custom-sm text-center grey-500 no-margin-bottom b-b">
+                    <a class="btn btn-block custom-button-color"
+                       ng-if="!ongoingCtrl.contestDetail.join_status"
+                       ng-href="{{ongoingCtrl.joinUrl}}">{{::ongoingCtrl.lang.JOIN_NOW}}</a>
+            <span class="btn btn-block btn-lg grey-400 text-white"
+                  ng-if="ongoingCtrl.contestDetail.join_status">{{::ongoingCtrl.lang.BUTTON_APPLIED}}
+            </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/ng-template" id="past.html">
+    <div class="app-body-inner-mt-0">
+        <div class="row animated slideInRight">
+            <div class="col-xs-12">
+                <details-head-dir contest="pastCtrl.contestDetail" shared="false"></details-head-dir>
+                <div class="alert alert-kicked no-margin-bottom margin-top-small"
+                     ng-if="pastCtrl.contestDetail.isKicked">
+                    <i class="fa fa-warning text-white"></i> You have lost more than
+                    {{::pastCtrl.contestDetail.stop_lose_setting}}%, so you have been withdrawn from the contest
+                </div>
+                <performance-chart-dir
+                        ng-if="pastCtrl.contestDetail.join_status"
+                        data="pastCtrl.performanceData"
+                        user-performance="pastCtrl.userPerformance">
+                </performance-chart-dir>
+                <prize-dir content="pastCtrl.contestDetail.reward_description"></prize-dir>
+                <top-performer-dir
+                        participants="pastCtrl.topPerformers"
+                        title="{{::pastCtrl.lang.TOP_PERFORMER}}"
+                        state="pastCtrl.topPerformersState"
+                        contest-id="pastCtrl.contestDetail.contest_id"
+                        daily="false"
+                        total-users="pastCtrl.contestDetail.user_join_sum">
+                </top-performer-dir>
+            </div>
+        </div>
+    </div>
+    <div class="app-footer">
+        <div class="row animated slideInRight">
+            <div class="col-xs-12">
+                <div class="box p-a-custom-sm text-center grey-500 no-margin-bottom b-b">
+                    <a class="btn btn-block grey-400 text-white">{{::pastCtrl.lang.STATUS_PAST}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/ng-template" id="upcoming.html">
+    <div class="app-body-inner-mt-0">
+        <div class="row animated slideInRight">
+            <div class="col-xs-12">
+                <details-head-dir contest="upcomingCtrl.contestDetail" shared="false"></details-head-dir>
+                <prize-dir content="upcomingCtrl.contestDetail.reward_description"></prize-dir>
+                <div class="row" ng-if="upcomingCtrl.contestDetail.is_dynamic_reward">
+                    <dynamic-reward-dir max-money="upcomingCtrl.contestDetail.dynamic_reward_max_money"
+                                        rise-money="upcomingCtrl.contestDetail.dynamic_reward_rise_money"
+                                        current-money="upcomingCtrl.contestDetail.current_money"
+                                        coin-mark="upcomingCtrl.contestDetail.coin_mark"></dynamic-reward-dir>
+                </div>
+                <div class="row b-t b-b margin-top-small">
+                    <div class="col-xs-12">
+                        <div class="box p-a">
+                            {{::upcomingCtrl.lang.APPLIED}}
+                            <a class="pull-right">
+                                {{::upcomingCtrl.contestDetail.user_join_sum}}&nbsp;&nbsp;{{::upcomingCtrl.lang.PEOPLE}}
+                                &nbsp;&nbsp; <i
+                                    class="fa  fa-angle-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <contest-rule-dir joined-participant="{{upcomingCtrl.contestDetail.user_join_sum}}"
+                                  min-participant="3000"
+                                  start-time="upcomingCtrl.contestDetail.start_date_time"
+                                  end-time="upcomingCtrl.contestDetail.end_date_time">
+                </contest-rule-dir>
+            </div>
+        </div>
+    </div>
+    <div class="app-footer">
+        <div class="row animated slideInRight">
+            <div class="col-xs-12">
+                <div class="box p-a-custom-sm text-center grey-500 no-margin-bottom b-b">
+                    <a class="btn btn-block custom-color" ng-if="!upcomingCtrl.contestDetail.join_status"
+                       ng-href="{{upcomingCtrl.joinUrl}}">{{::upcomingCtrl.lang.JOIN_NOW}}</a>
+                    <span class="btn btn-block btn-lg grey-400 text-white"
+                          ng-if="upcomingCtrl.contestDetail.join_status">{{::upcomingCtrl.lang.BUTTON_APPLIED}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/ng-template" id="details-proxy.html">
+    <div class="ui-view-container">
+        <div class="h-v row-col">
+            <div class="row-cell v-m text-center">
+                <div class="m-b">
+                    <div class="m-t-md font-bold">
+                        <img src="/img/loading_cn.gif" class="loading-img"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="details-head.html">
+    <div class="navbar custom-navbar app-header">
+        <div class="row" ng-if="shared !== 'true'">
+            <div class="col-xs-2 p-l-0">
+                <a ui-sref="contest" class="navbar-item pull-left nav-back-img-detail">
+                    <img src="/img/icon_back_navbar-2.png" class="img-responsive inline"/>
+                </a>
+            </div>
+            <div class="col-xs-8 text-center text-md">
+                <span class="navbar-item text-white" style="margin-right:0">{{::lang.CONTEST_DETAILS}}</span>
+            </div>
+            <div class="col-xs-2">
+                <a ng-href="{{shareLink}}">
+                <span class="navbar-item pull-right text-white" style="margin-right: 0;">
+                    {{::lang.SHARE}}
+                </span>
+                </a>
+            </div>
+        </div>
+        <div class="row" ng-if="shared === 'true'">
+            <div class="col-xs-2 p-l-0"></div>
+            <div class="col-xs-8 text-center text-md">
+                <span class="navbar-item text-white" style="margin-right:0">{{::lang.CONTEST_DETAILS}}</span>
+            </div>
+            <div class="col-xs-2"></div>
+        </div>
+    </div>
+    <div class="row details-head-top-margin">
+        <div class="col-xs-12">
+            <div class="box text-center no-margin-bottom head-details-bg"
+                 ng-class="{
+                 'header-forex':contest.market_code === 'FX',
+                 'header-futures':contest.market_code === 'FT',
+                 'header-stock':contest.market_code === 'SC'
+             }">
+                <div class="p-a b-b">
+                    <p>
+                        <img ng-src="{{contest.icon_image || 'http://i.imgur.com/v28SQrj.png'}}"
+                             class="img-circle w-80">
+                    </p>
+                    <span class="text-md block" ng-bind="contest.name"></span>
+                    <span class="text-sm block text-grey-light" ng-bind="contest.title"></span>
+                </div>
+            </div>
+            <div class="box no-margin-bottom b-b">
+                <div class="row no-gutter">
+                    <div class="col-xs-6 b-r">
+                        <div class="p-a-xs block text-center">
+                            <div ng-if="contest.progress_status === 'upcoming'">
+                                <span ng-bind="formattedStartTime"></span>
+                                {{::lang.DAYS_LEFT}}
+                            </div>
+                            <div ng-if="contest.progress_status === 'ongoing'">
+                                <span ng-bind="formattedEndTime"></span>
+                                {{::lang.DAYS_LEFT_2}}
+                            </div>
+                            <span ng-if="contest.progress_status === 'upcoming'" class="text-grey-light block">{{::lang.STATUS_UPCOMING}}</span>
+                            <span ng-if="contest.progress_status === 'ongoing'" class="text-grey-light block">{{::lang.STATUS_ONGOING}}</span>
+                            <span ng-if="contest.progress_status === 'past'" class="text-grey-light block">{{::lang.STATUS_PAST}}</span>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 b-r">
+                        <div class="p-a-xs block text-center">
+                            <span ng-bind="contest.user_join_sum"></span>
+                            <span class="block text-grey-light ">{{::lang.PEOPLE_APPLIED}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/ng-template" id="dynamic-reward.html">
+    <div class="col-xs-12">
+        <div class="box p-a">
+            <p>{{::lang.CASH_POOL_TITLE}}：</p>
+            <div class="progress">
+                <div class="progress-bar custom-progress text-center" style="width: 0.04%">
+                    {{::coinMark}}{{::currentMoney}}
+                </div>
+            </div>
+            <div ng-bind-html="description"></div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="error.html">
+    <div class="ui-view-container">
+        <div class="h-v row-col">
+            <div class="row-cell v-m text-center">
+                <div class="m-b">
+                    <div class="m-t-md font-bold">
+                        <p>Oops! Sorry there is a problem. Please try again later!</p>
+                        <button class="btn btn-sm custom-button-color" ng-click="contestErrorCtrl.backAction()"
+                                ng-hide="contestErrorCtrl.error">
+                            <i class="fa fa-arrow-left"></i> Back
+                        </button>
+                        <a href="contestErrorCtrl.deeplink" class="btn btn-sm custom-button-color"
+                           ng-show="contestErrorCtrl.error">
+                            <i class="fa fa-arrow-left"></i> Back
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/ng-template" id="head.html">
+    <div class="row margin-bottom-small">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="row tag tag-forex" ng-if="contest.market_code === 'FX'"></div>
+                <div class="row tag tag-futures" ng-if="contest.market_code === 'FT'"></div>
+                <div class="row tag tag-stock" ng-if="contest.market_code === 'SC'"></div>
+                <div class="box-header b-b">
+                    <div class="row contest-details">
+                        <div class="col-xs-3">
+                            <p>
+                                <img ng-src="{{contest.icon_image || 'https://s3.ap-northeast-2.amazonaws.com/fdt-social/header-icon.png'}}"
+                                     class="img-circle w-56 img-responsive"></p>
+                        </div>
+                        <div class="col-xs-9">
+                            <a class="contest-details">
+                            <span class="pull-right contest-details">
+                                <i class="fa fa-angle-right text-contest-details"></i>
+                            </span>
+                            </a>
+                            <div><h6 ng-bind="contest.name"></h6></div>
+                            <div>
+                                <span ng-bind="formattedStartTime"></span>
+                                -
+                                <span ng-bind="formattedEndTime"></span>
+                            </div>
+                            <a href="" ng-if="contest.progress_status === 'ongoing'"><span class="label label-ongoing">{{::lang.STATUS_ONGOING}}</span></a>
+                            <a href="" ng-if="contest.progress_status === 'upcoming'"><span
+                                    class="label label-upcoming">{{::lang.STATUS_APPLYING}}</span></a>
+                            <a href="" ng-if="contest.progress_status === 'past'"><span class="label grey-300">{{::lang.STATUS_PAST}}</span></a>
+                            <a href="" ng-if="contest.join_status === true"><span class="label label-joined"><i
+                                    class="fa fa-check text-white"></i> {{::lang.STATUS_JOINED}}</span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-body no-padding-xs m-a-sm">
+                    <div class="list-body"
+                         ng-if="contest.progress_status === 'upcoming' && contest.is_kicked === false">
+                        <sub-head-info-dir status='contest.progress_status'
+                                           joined="contest.join_status"
+                                           total-participants="contest.user_join_sum"
+                                           start-time="contest.start_date_time"
+                                           end-time="contest.end_date_time"
+                                           currency="contest.coin_mark"
+                                           prize="contest.current_money"></sub-head-info-dir>
+                    </div>
+                    <div class="list-body" ng-if="contest.progress_status === 'ongoing' && contest.is_kicked === false">
+                        <sub-head-stats-dir ng-if="contest.join_status"
+                                            status='contest.progress_status'
+                                            joined="contest.join_status"
+                                            score="contest.fdt_score"
+                                            score-stats="contest.fdt_score_status"
+                                            ranking="contest.fdt_ranking"
+                                            ranking-stats="contest.fdt_ranking_status"
+                                            global-rank="contest.fdt_competition"
+                                            global-rank-stats="contest.fdt_competition_status"
+                                            start-time="contest.start_date_time"
+                                            end-time="contest.end_date_time"
+                                            prize="contest.current_money"></sub-head-stats-dir>
+                        <sub-head-info-dir ng-if="!contest.join_status && contest.is_kicked === false"
+                                           status='contest.progress_status'
+                                           joined="contest.join_status"
+                                           total-participants="contest.user_join_sum"
+                                           start-time="contest.start_date_time"
+                                           end-time="contest.end_date_time"
+                                           currency="contest.coin_mark"
+                                           prize="contest.current_money"></sub-head-info-dir>
+                    </div>
+                    <div class="list-body" ng-if="contest.progress_status === 'past'">
+                        <sub-head-stats-dir ng-if="contest.join_status && contest.is_kicked === false"
+                                            joined="contest.join_status"
+                                            status='contest.progress_status'
+                                            score="contest.fdt_score"
+                                            score-stats="contest.fdt_score_status"
+                                            ranking="contest.fdt_ranking"
+                                            ranking-stats="contest.fdt_ranking_status"
+                                            global-rank="contest.fdt_competition"
+                                            global-rank-stats="contest.fdt_competition_status"
+                                            start-time="contest.start_date_time"
+                                            end-time="contest.end_date_time"
+                                            prize="contest.current_money"></sub-head-stats-dir>
+                        <sub-head-info-dir ng-if="!contest.join_status && contest.is_kicked === false"
+                                           status='contest.progress_status'
+                                           joined="contest.join_status"
+                                           total-participants="contest.user_join_sum"
+                                           start-time="contest.start_date_time"
+                                           end-time="contest.end_date_time"
+                                           currency="contest.coin_mark"
+                                           prize="contest.current_money"></sub-head-info-dir>
+                    </div>
+                    <div class="list-body" ng-if="contest.is_kicked">
+                        <sub-head-kicked-dir stop-loss="contest.stop_lose_setting"></sub-head-kicked-dir>
+                    </div>
+                    <div class="list-body" ng-if="!contest.verify && contest.joined">
+                        <sub-head-verify-dir></sub-head-verify-dir>
+                    </div>
+                </div>
+                <div class="box-divider m-a-0"></div>
+            </div>
+        </div>
+    </div>
+</script>
+
+
+<script type="text/ng-template" id="sub-head-info.html">
+    <div class="row no-gutter">
+        <div class="col-xs-4 text-center b-r">
+            <h6 ng-bind="totalParticipants"></h6>
+            <small ng-if="status === 'upcoming'">{{::lang.INFO_APPLY}}</small>
+            <small ng-if="status === 'ongoing' || status === 'past'">{{::lang.INFO_JOIN}}</small>
+        </div>
+        <div class="col-xs-4 text-center b-r">
+            <h6 ng-bind="currency + ' ' + prize"></h6>
+            <small>{{::lang.INFO_TOTAL_PRIZE}}</small>
+        </div>
+        <div class="col-xs-4 text-center">
+            <h6 ng-if="status === 'upcoming'" ng-bind="formattedStartTime"> Days</h6>
+            <small ng-if="status === 'upcoming'">{{::lang.INFO_START}}</small>
+            <h6 ng-if="status === 'ongoing'" ng-bind="formattedEndTime"> Days</h6>
+            <small ng-if="status === 'ongoing'">{{::lang.INFO_END}}</small>
+            <h6 ng-if="status === 'past'">--</h6>
+            <small ng-if="status === 'past'">{{::lang.INFO_FINISHED}}</small>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="sub-head-kicked.html">
+    <div class="row no-gutter">
+        <div class="col-xs-12">
+            <div class="box grey-200">
+                <div class="box-header m-a-sm text-center">
+                    亏损超过{{stopLoss}}%，失去比赛资格。不要气馁，做好风控，下次再战
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="sub-head-stats.html">
+    <div class="row no-gutter">
+        <div class="col-xs-4 text-center b-r">
+            <h6 ng-class="{'performance-info-up': scoreStats === 'up', 'performance-info-down': scoreStats === 'down'}">
+                {{::score || '-'}}
+                <span ng-if="scoreStats === 'up'&& status !== 'past'"><i class="fa fa-caret-up"></i></span>
+                <span ng-if="scoreStats === 'down'&& status !== 'past'"><i class="fa fa-caret-down"></i></span>
+            </h6>
+            <small>{{::lang.STATS_SCORE}}</small>
+        </div>
+        <div class="col-xs-4 text-center b-r">
+            <h6 ng-class="{'performance-info-up': rankingStats === 'up', 'performance-info-down': rankingStats === 'down'}">
+                {{::ranking || '-'}}
+                <span ng-if="rankingStats === 'up' && status !== 'past'"><i class="fa fa-caret-up"></i></span>
+                <span ng-if="rankingStats === 'down'&& status !== 'past'"><i class="fa fa-caret-down"></i></span>
+            </h6>
+            <small>{{::lang.STATS_RANKING}}</small>
+        </div>
+        <div class="col-xs-4 text-center">
+            <h6 ng-class="{'performance-info-up': globalRankStats === 'up', 'performance-info-down': globalRankStats === 'down'}">
+                <span ng-if="joined === true">{{::globalRank || '-'}}%</span>
+                <span ng-if="globalRankStats === 'up'&& status !== 'past'"><i class="fa fa-caret-up"></i></span>
+                <span ng-if="globalRankStats === 'down'&& status !== 'past'"><i class="fa fa-caret-down"></i></span>
+                <span ng-if="!joined && status === 'past'">--</span>
+            </h6>
+            <small>{{::lang.STATS_GLOBAL_RANKING}}</small>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="sub-head-verify.html">
+    <div class="row no-gutter">
+        <div class="col-xs-12 text-center">
+            <p class="text">完成身份认证，以显示得分和排名</p>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="list-directive.html">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="margin-top-small">{{title}}</div>
+            <div ng-repeat="contest in contests track by $index">
+                <contest-head-dir contest="contest" status="contest.status"></contest-head-dir>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="nav.html">
+    <div class="app-header">
+        <div class="row animated slideInRight">
+            <div class="col-xs-12">
+                <div class="box custom-color">
+                    <div class="box-header p-l-xs p-r-xs" align="center">
+                        <a ng-click="goBack()" class="pull-left back-button" ng-if="!deeplink">
+                            <img src="/img/icon_back_navbar-2.png" class="img-responsive nav-back-img"/>
+                        </a>
+                        <!-- for quitting contest -->
+                        <a ng-href="{{deeplink}}" class="pull-left" ng-if="deeplink">
+                            <img src="/img/icon_back_navbar-2.png" class="img-responsive nav-back-img"/>
+                        </a>
+                        {{title}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="news.html">
+    <div class="row" ng-controller="ContestNewsCtrl as newsCtrl">
+        <div class="col-xs-12">
+            <nav-dir title="全部公告"></nav-dir>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="list box">
+                        <div class="list-item" ng-repeat="news in newsCtrl.news">
+                            <div class="list-body">
+                                <a href="" class="_500">{{news.title}}</a>
+                                <small class="block text-muted">{{news.date}}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="participant.html">
+    <div class="list-item" bs-collapse-toggle data-toggle="collapse"
+         ng-click="participantCtrl.openChart(participantCtrl.participant.user_id)">
+        <div class="list-left">
+            <span class="w-40 avatar red"></span>
+        </div>
+        <div class="list-body">
+            <div class="m-y-sm pull-right">
+                <span class="label label-performer" ng-if="!participantCtrl.daily">{{::participantCtrl.participant.fdt_score}} {{::participantCtrl.lang.POINTS}}</span>
+            <span class="label"
+                  ng-class="{'performance-label-up': participantCtrl.participant.ranking_upgrade_status === 'up', 'performance-label-down': participantCtrl.participant.ranking_upgrade_status === 'down'}"
+                  ng-if="participantCtrl.daily">
+                <i class="fa fa-caret-up" ng-if="participantCtrl.participant.ranking_upgrade_status === 'up'"></i>
+                <i class="fa fa-caret-down" ng-if="participantCtrl.participant.ranking_upgrade_status === 'down'"></i>
+                {{::participantCtrl.participant.ranking}}
+            </span>
+            </div>
+            <span class="_500">{{::participantCtrl.participant.username}}</span>
+            <small class="block text-muted">{{::participantCtrl.participant.school_name || 'School Name'}}</small>
+        </div>
+    </div>
+    <div class="box no-padding-xs" ng-if="participantCtrl.showChart">
+        <performance-chart-dir
+                data="participantCtrl.participant.data"
+                user-performance="participantCtrl.userPerformance"
+                is-preview="true"></performance-chart-dir>
+    </div>
+</script>
+
+<script type="text/ng-template" id="performance-chart.html">
+    <div class="row">
+        <div class="col-xs-12 ">
+            <div class="box">
+                <ul class="list-group" ng-class="{'grey-200': isPreview, 'shadow-top-bottom-inner': isPreview}">
+                    <li class="list-item b-b">
+                        <span class="pull-left" ng-if="!isPreview">{{::lang.MY_CONTEST_SCORE}}</span>
+                        <span class="pull-left" ng-if="isPreview">{{::lang.CONTEST_SCORE}}</span>
+                        <a ui-sref='rules' class="pull-right">
+                            {{::lang.SCORING_CRITERIA}}&nbsp;&nbsp;
+                            <i class="fa fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li class="list-item no-padding-xs">
+                        <br>
+                        <br>
+                        <div class="container-fluid text-center">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="chart-overlay">
+                                        <h5 class="text-white">{{::userPerformance.fdt_score}}</h5>
+                                        <small ng-if="userPerformance.fdt_score_upgrade_status === 'up'"
+                                               class="performance-info-up"><i class="fa fa-caret-up"></i>&nbsp;
+                                            {{::userPerformance.fdt_score_upgrade}}
+                                        </small>
+                                        <small ng-if="userPerformance.fdt_score_upgrade_status === 'down'"
+                                               class="performance-info-up"><i class="fa fa-caret-down"></i>&nbsp;
+                                            {{::userPerformance.fdt_score_upgrade}}
+                                        </small>
+                                        <small ng-if="userPerformance.fdt_score_upgrade_status === 'same'"
+                                               class="text-white">{{::userPerformance.fdt_score_upgrade}}
+                                        </small>
+                                    </div>
+                                    <canvas tc-chartjs-radar chart-options="options" chart-data="data"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-item text-center">
+                        <small class="text-muted">{{::lang.NOTE_PERFORMANCE_CHART}}</small>
+                    </li>
+                    <li class="list-item text-center" ng-if="!isPreview">
+                        <div class="text-center p-a-sm b-a grey-100">
+                            <a class="pull-left">
+                                {{::lang.RANKING}}&nbsp;
+                                <span class="performance-text">{{::userPerformance.fdt_ranking}}</span>&nbsp;&nbsp;
+                            <span class="label"
+                                  ng-class="{'performance-label-up': userPerformance.fdt_ranking_upgrade_status === 'up', 'performance-label-down': userPerformance.fdt_ranking_upgrade_status === 'down'}">
+                                <i class="fa fa-caret-up" ng-if="userPerformance.fdt_ranking_upgrade_status==='up'"></i>
+                                <i class="fa fa-caret-down"
+                                   ng-if="userPerformance.fdt_ranking_upgrade_status==='down'"></i>&nbsp;{{::userPerformance.fdt_ranking_upgrade}}
+                            </span>
+                            </a>
+                            |
+                            <span class="pull-right">ROI <span
+                                    class="performance-text">{{::userPerformance.roi}}%</span></span>
+                        </div>
+                    </li>
+                    <li class="list-item text-center" ng-if="isPreview">
+                    <span class="btn btn-outline custom-button-outline">
+                        <i class="fa fa-user pull-left"></i>{{::lang.VIEW_PROFILE}}
+                    </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="peformer-list.html">
+    <nav-dir title="performerListCtrl.title"></nav-dir>
+    <div class="app-body-inner-mb-0">
+        <div class="row animated slideInRight">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="list inset box" bs-collapse ng-model="defaultCollapse">
+                        <participant-dir participant="topPerformer"
+                                         daily="performerListCtrl.daily"
+                                         ng-repeat="topPerformer in performerListCtrl.topPerformers track by $index"></participant-dir>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="popup.html">
+    <div class="modal-custom w-full v-m">
+        <div class="row">
+            <div class="col-xs-12 text-center">
+                <div class="p-a-sm box-color r box-shadow-z1 m-a">
+                    <div class="row">
+                        <div class="col-xs-12 p-a-xs">
+                            <span class="custom-text-color text-md" style="font-weight: bold;"
+                                  ng-bind="popUpCtrl.lang.REGISTRATION_SUCCESS"></span>
+                            <br>
+                            <span class="text-sm text-grey-light" ng-bind="popUpCtrl.lang.CONTEST_WELCOME"></span>
+                            <img class="img-responsive m-t-sm" ng-src="{{popUpCtrl.popUpImage}}"/>
+                            <a class="custom-text-color" ng-bind="popUpCtrl.lang.CONTEST_LEARN_MORE"></a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-xs-6 p-a-xs">
+                            <button class="btn btn-block btn-sm btn-outline custom-button-outline"
+                                    ng-click="popUpCtrl.done()">{{::popUpCtrl.lang.DONE}}
+                            </button>
+                        </div>
+                        <div class="col-xs-6 p-a-xs">
+                            <a class="btn btn-block btn-sm custom-button-color"
+                               ng-href="{{popUpCtrl.shareLink}}">{{::popUpCtrl.lang.SHARE}}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="prize.html">
+    <div class="row margin-top-small">
+        <div class="col-xs-12">
+            <div class="box p-a no-margin-bottom b-b">
+                <div ng-bind-html="content"></div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="rules.html">
+    <nav-dir title="rulesCtrl.title"></nav-dir>
+    <div class="app-body-inner-mb-0">
+        <div class="row animated slideInRight">
+            <div class="row margin-top-small">
+                <div class="col-xs-12">
+                    <div class="m-b">
+                        <ng-include src="rulesCtrl.rulesHtmlSrc"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="rules-cn.html">
+    <div class="box m-b-xs ng-scope">
+        <div class="box-header">
+            <span class="custom-text-color">大赛价值</span>
+        </div>
+        <div class="panel-collapse ">
+            <div class="box-body b-t">
+                这是一场全球大学生都在玩的财富竞技比赛。
+                <ul>
+                    <li>你拼的是脑力而非运气</li>
+                    <li>你将收获：全球排名、高额奖金、专业培养、高薪就业</li>
+                    <li>胜利者还有机会创立基金，获得FDT百万投资，坐享收益分成</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="box m-b-xs ng-scope">
+        <div class="box-header">
+            <span class="custom-text-color">大赛规则详解</span>
+        </div>
+        <div class="panel-collapse ">
+            <div class="box-body b-t">
+                预赛:
+                <ul class="list-unstyled">
+                    <li>时间: 2015.10 ~ 2016.3</li>
+                    <li>以单校单人赛形式在APP上模拟交易比赛。优胜选手组成团队（3个学生选手+1导师），晋级半决赛。</li>
+                </ul>
+
+                <div class="grey-100 p-a-xs">规则:
+                    <ol>
+                        <li>注册提供$100,000初始模拟资金，比赛结束前随时可加入比赛</li>
+                        <li>以比赛得分由高到低计算成绩；若比赛得分相同，以加入比赛先后时间排序</li>
+                        <li>比赛期间至少交易40次</li>
+                    </ol>
+                </div>
+                <hr>
+                半决赛:
+                <ul class="list-unstyled">
+                    <li>Contest date: 2016.4 ~ 2016.6</li>
+                    <li>以团队赛形式在APP上进行模拟交易比赛，大陆地区半决赛成绩最好的5个团队代表本校或区域参加决赛。</li>
+                </ul>
+
+                <div class="grey-100 p-a-xs">规则:
+                    <ol>
+                        <li>以比赛得分进行排名</li>
+                        <li>团队账户资金曲线回撤最大不能超过30%，否则账户重置为初始资金额度</li>
+                        <li>团队账户最大亏损不能超过初始资金30%，否则取消团队参赛资格</li>
+                        <li>每周至少交易10次以上</li>
+                    </ol>
+                </div>
+                <hr>
+                总决赛:
+                <ul class="list-unstyled">
+                    <li>时间: 2016.7 ~ 2016.8</li>
+                    <li>决赛使用10万美金实盘交易，来自中国大陆、美国、英国、印度、台湾、香港，共10支队伍进行终极对决</li>
+                </ul>
+
+                <div class="grey-100 p-a-xs">规则:
+                    <ol>
+                        <li>每个参赛团队可以得到一个$100,000的基金账户，全程实盘交易</li>
+                        <li>取总排名最高的一个学校团队，作为冠军团队冠军团队可获得收益所得的20%作为奖金</li>
+                        <li>所有总决赛的团队，可以继续保留基金管理资格</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box m-b-xs ng-scope">
+        <div class="box-header">
+            <span class="custom-text-color">比赛得分规则</span>
+        </div>
+        <div class="panel-collapse ">
+            <div class="box-body b-t">
+                比赛得分，是根据交易员投资行为和结果综合评估而来。以下几个维度会影响你的最终得分
+                <hr>
+                <img class="img-responsive"
+                     src="https://s3.ap-northeast-2.amazonaws.com/fdt-social/sample_chart_china.png"/>
+                <p>盈利能力:</p>
+                <div class="grey-100 p-a-xs">
+                    不要只追求高ROI(投资回报率)。
+                    保持稳定的持续的盈利，有助于得分的增加，不稳定的盈利或者经常性地亏损，会对你的盈利分带来负面影响
+                </div>
+                <hr>
+                <p>风险控制:</p>
+                <div class="grey-100 p-a-xs">
+                    伟大的投资者都强调风险控制，我们会关注你在仓位控制、收益回撤、损失波动、持仓时间等各个维度上的表现，下单必考虑风险，就能赢得高分
+                </div>
+                <hr>
+                <p>专注程度:</p>
+                <div class="grey-100 p-a-xs">
+                    更多的努力，意味着更大的回报。关注市场波动，持续地在市场中博杀，可以获得更高的专注程度评分
+                </div>
+                <hr>
+                <p>策略执行:</p>
+                <div class="grey-100 p-a-xs">
+                    学习并选择适合你的投资策略，并将策略从始至终贯穿于整个投资比赛，可以获得更高的策略执行评分
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="rules-en.html">
+    <div class="box m-b-xs ng-scope">
+        <div class="box-header">
+            <span class="custom-text-color">Contest Features</span>
+        </div>
+        <div class="panel-collapse ">
+            <div class="box-body b-t">
+                A trading contest in which college students worldwide compete in!
+                <ul>
+                    <li>Ranked by trading strategies instead of luck</li>
+                    <li>You can earn: global ranking, cash prizes, professional training, and job opportunities</li>
+                    <li>Winners have the chance to create funds, earn seeding and profit sharing from FDT!</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="box m-b-xs ng-scope">
+        <div class="box-header">
+            <span class="custom-text-color">Contest Rules</span>
+        </div>
+        <div class="panel-collapse ">
+            <div class="box-body b-t">
+                Round 1:
+                <ul class="list-unstyled">
+                    <li>Contest date: 2016.2 ~ 2016.4</li>
+                    <li>Contest duration: 8 weeks</li>
+                </ul>
+
+                <div class="grey-100 p-a-xs">Contest method:
+                    <ol>
+                        <li>Player vs player by school grouping in same region</li>
+                        <li>Make minimum 40 trades, 5 trades in minimum 5 of 8 weeks</li>
+                        <li>The top 9 players (by FDT Score) from each school will advance to Round 2</li>
+                    </ol>
+                </div>
+                <hr>
+                Round 2:
+                <ul class="list-unstyled">
+                    <li>Contest date: 2016.5 ~ 2016.6</li>
+                    <li>Contest duration: 8 weeks</li>
+                </ul>
+
+                <div class="grey-100 p-a-xs">Contest method:
+                    <ol>
+                        <li>School team vs school team in same region</li>
+                        <li>Teams must make minimum 80 trades. 5 trades in minimum 5 of 8 weeks</li>
+                        <li>The team with the best FDT Score from each country advances to the championship in China
+                        </li>
+                    </ol>
+                </div>
+                <hr>
+                Round 3:
+                <ul class="list-unstyled">
+                    <li>Contest date: 2016.7 ~ 2016.8</li>
+                    <li>Contest duration: 8 weeks</li>
+                </ul>
+
+                <div class="grey-100 p-a-xs">Contest method:
+                    <ol>
+                        <li>Teams compete with $100K live fund. There are 10 teams from China, US, UK, India, Taiwan,
+                            and
+                            Hong Kong
+                        </li>
+                        <li>The school tam with the highest score will become the winning team</li>
+                        <li>Winning team can get 20% of their profits as prize. All of the teams in round 3 can continue
+                            to
+                            manage their live fund
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box m-b-xs ng-scope">
+        <div class="box-header">
+            <span class="custom-text-color">Scoring Rules</span>
+        </div>
+        <div class="panel-collapse ">
+            <div class="box-body b-t">
+                The score in the contest is determined by trading behavior and comprehensive analysis of trading result.
+                The following factors influence your score:
+                <hr>
+                <img class="img-responsive"
+                     src="https://s3.ap-northeast-2.amazonaws.com/fdt-social/sample_chart_global.png"/>
+                <p>Profitability:</p>
+                <div class="grey-100 p-a-xs">
+                    Don\t just pursue for high ROI. Maintain stable profits will help you to increase your score,
+                    unstable profits or continuous loss will negatively affect your score.
+                </div>
+                <hr>
+                <p>Risk management:</p>
+                <div class="grey-100 p-a-xs">
+                    The best traders emphasize on risk management.
+                    We will check the performance of your position sop loss, loss patten, holding duration, and more.
+                    You should consider the risks when you make trades
+                </div>
+                <hr>
+                <p>Level of your focus:</p>
+                <div class="grey-100 p-a-xs">
+                    The harder you try, you can have better returns.
+                    Be aware of market changes and continue to make trades can help you increase the score on your level
+                    of
+                    focus.
+                </div>
+                <hr>
+                <p>Execution of strategy:</p>
+                <div class="grey-100 p-a-xs">
+                    Learn and choose a trading strategy that suits you.
+                    If you incorporate the strategy throughout the entire contest, then you are able to increase the
+                    score
+                    for execution of strategy.
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="rules-tw.html">
+    <div class="box m-b-xs ng-scope">
+        <div class="box-header">
+            <span class="custom-text-color">大赛价值</span>
+        </div>
+        <div class="panel-collapse ">
+            <div class="box-body b-t">
+                这是一场全球大学生都在玩的财富竞技比赛。
+                <ul>
+                    <li>你拼的是脑力而非运气</li>
+                    <li>你将收获：全球排名、高额奖金、专业培养、高薪就业</li>
+                    <li>胜利者还有机会创立基金，获得FDT百万投资，坐享收益分成</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="box m-b-xs ng-scope">
+        <div class="box-header">
+            <span class="custom-text-color">大赛规则详解</span>
+        </div>
+        <div class="panel-collapse ">
+            <div class="box-body b-t">
+                预赛:
+                <ul class="list-unstyled">
+                    <li>时间: 2015.10 ~ 2016.3</li>
+                    <li>以单校单人赛形式在APP上模拟交易比赛。优胜选手组成团队（3个学生选手+1导师），晋级半决赛。</li>
+                </ul>
+
+                <div class="grey-100 p-a-xs">规则:
+                    <ol>
+                        <li>注册提供$100,000初始模拟资金，比赛结束前随时可加入比赛</li>
+                        <li>以比赛得分由高到低计算成绩；若比赛得分相同，以加入比赛先后时间排序</li>
+                        <li>比赛期间至少交易40次</li>
+                    </ol>
+                </div>
+                <hr>
+                半决赛:
+                <ul class="list-unstyled">
+                    <li>Contest date: 2016.4 ~ 2016.6</li>
+                    <li>以团队赛形式在APP上进行模拟交易比赛，大陆地区半决赛成绩最好的5个团队代表本校或区域参加决赛。</li>
+                </ul>
+
+                <div class="grey-100 p-a-xs">规则:
+                    <ol>
+                        <li>以比赛得分进行排名</li>
+                        <li>团队账户资金曲线回撤最大不能超过30%，否则账户重置为初始资金额度</li>
+                        <li>团队账户最大亏损不能超过初始资金30%，否则取消团队参赛资格</li>
+                        <li>每周至少交易10次以上</li>
+                    </ol>
+                </div>
+                <hr>
+                总决赛:
+                <ul class="list-unstyled">
+                    <li>时间: 2016.7 ~ 2016.8</li>
+                    <li>决赛使用10万美金实盘交易，来自中国大陆、美国、英国、印度、台湾、香港，共10支队伍进行终极对决</li>
+                </ul>
+
+                <div class="grey-100 p-a-xs">规则:
+                    <ol>
+                        <li>每个参赛团队可以得到一个$100,000的基金账户，全程实盘交易</li>
+                        <li>取总排名最高的一个学校团队，作为冠军团队冠军团队可获得收益所得的20%作为奖金</li>
+                        <li>所有总决赛的团队，可以继续保留基金管理资格</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box m-b-xs ng-scope">
+        <div class="box-header">
+            <span class="custom-text-color">比赛得分规则</span>
+        </div>
+        <div class="panel-collapse ">
+            <div class="box-body b-t">
+                比赛得分，是根据交易员投资行为和结果综合评估而来。以下几个维度会影响你的最终得分
+                <hr>
+                <img class="img-responsive"
+                     src="https://s3.ap-northeast-2.amazonaws.com/fdt-social/sample_chart_china.png"/>
+                <p>盈利能力:</p>
+                <div class="grey-100 p-a-xs">
+                    不要只追求高ROI(投资回报率)。
+                    保持稳定的持续的盈利，有助于得分的增加，不稳定的盈利或者经常性地亏损，会对你的盈利分带来负面影响
+                </div>
+                <hr>
+                <p>风险控制:</p>
+                <div class="grey-100 p-a-xs">
+                    伟大的投资者都强调风险控制，我们会关注你在仓位控制、收益回撤、损失波动、持仓时间等各个维度上的表现，下单必考虑风险，就能赢得高分
+                </div>
+                <hr>
+                <p>专注程度:</p>
+                <div class="grey-100 p-a-xs">
+                    更多的努力，意味着更大的回报。关注市场波动，持续地在市场中博杀，可以获得更高的专注程度评分
+                </div>
+                <hr>
+                <p>策略执行:</p>
+                <div class="grey-100 p-a-xs">
+                    学习并选择适合你的投资策略，并将策略从始至终贯穿于整个投资比赛，可以获得更高的策略执行评分
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="share.html">
+    <div class="app-body-inner-mt-0">
+        <div class="row animated slideInRight">
+            <div class="row">
+                <details-head-dir contest="shareCtrl.contestDetail" shared="true"></details-head-dir>
+                <prize-dir content="shareCtrl.contestDetail.reward_description"></prize-dir>
+                <dynamic-reward-dir
+                        ng-if="shareCtrl.contestDetail.is_dynamic_reward"
+                        max-money="shareCtrl.contestDetail.dynamic_reward_max_money"
+                        rise-money="shareCtrl.contestDetail.dynamic_reward_rise_money"
+                        current-money="shareCtrl.contestDetail.current_money"
+                        coin-mark="shareCtrl.contestDetail.coin_mark"></dynamic-reward-dir>
+            </div>
+        </div>
+    </div>
+    <div class="app-footer">
+        <div class="row animated slideInRight">
+            <div class="col-xs-12">
+                <div class="box p-a-custom-sm text-center grey-500 no-margin-bottom b-b">
+                    <a class="btn btn-block custom-color"
+                       ng-href="{{shareCtrl.joinUrl}}">{{::shareCtrl.lang.JOIN_NOW}}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="top-performer.html">
+    <div class="row margin-top-small">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header b-b view-all">
+                    <ul class="list-group">
+                        <li class="list-item no-padding-xs view-all">
+                        <span class="pull-left view-all">
+                            {{::title}}
+                        </span>
+                            <a class="pull-right view-all">
+                                {{::lang.VIEW_ALL}}&nbsp;&nbsp;<i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="list inset box" bs-collapse ng-model="defaultCollapse">
+                    <participant-dir participant="participant" daily="daily"
+                                     ng-repeat="participant in participants track by $index"></participant-dir>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="user-contest.html">
+    <nav-dir title="listUserCtrl.title"></nav-dir>
+    <div class=" app-body-inner-mb-0">
+        <div class="row animated slideInRight">
+            <div class="col-xs-12">
+                <div>
+                    <list-dir contests="listUserCtrl.upcomingContest" title="{{listUserCtrl.titleUpcoming}}"
+                              ng-if="listUserCtrl.upcomingContest.length > 0"></list-dir>
+                </div>
+                <div>
+                    <list-dir contests="listUserCtrl.ongoingContest" title="{{listUserCtrl.titleOngoing}}"
+                              ng-if="listUserCtrl.ongoingContest.length > 0"></list-dir>
+                </div>
+                <div>
+                    <list-dir contests="listUserCtrl.pastContest" title="{{listUserCtrl.titlePast}}"
+                              ng-if="listUserCtrl.pastContest.length > 0"></list-dir>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

@@ -1,0 +1,16 @@
+<div class="row">
+    <br />
+    <div class="col-xs-4 col-md-4 col-md-offset-1 col-xs-offset-1 text-center">
+        <p class="bg-primary">開始時間(交易日) : {{ edit.contest.tradeStartDatetime | date: 'yyyy-MM-dd' }}</p>
+        <datepicker ng-model="edit.contest.tradeStartDatetime"
+                    ng-style="{'display': 'inline-block'}"
+                    show-weeks="true" class="well well-sm"></datepicker>
+    </div>
+
+    <div class="col-xs-4 col-md-4 col-md-offset-1 col-xs-offset-1 text-center">
+        <p class="bg-primary">結束時間(交易日) : {{ edit.contest.tradeEndDatetime | date: 'yyyy-MM-dd' }}</p>
+        <datepicker ng-model="edit.contest.tradeEndDatetime"
+                    ng-style="{'display': 'inline-block'}"
+                    show-weeks="true" class="well well-sm"></datepicker>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+<div class="row no-gutter">
+    <div class="col-xs-4 text-center b-r">
+        <h6 class="sub-info-value" ng-bind="totalParticipants"></h6>
+        <sapn class="sub-info-title apply" ng-if="status === 'upcoming'">{{::lang.INFO_APPLY}}</sapn>
+        <sapn class="sub-info-title apply" ng-if="status === 'ongoing' || status === 'past'">{{::lang.INFO_JOIN}}</sapn>
+    </div>
+    <div class="col-xs-4 text-center b-r">
+        <h6 class="sub-info-value" ng-bind="currency + ' ' + prize"></h6>
+        <sapn class="sub-info-title cash">{{::lang.INFO_TOTAL_PRIZE}}</sapn>
+    </div>
+    <div class="col-xs-4 text-center">
+        <h6 class="sub-info-value" ng-if="status === 'upcoming'" ng-bind="formattedStartTime"> Days</h6>
+        <sapn class="sub-info-title time" ng-if="status === 'upcoming'">{{::lang.INFO_START}}</sapn>
+        <h6 class="sub-info-value" ng-if="status === 'ongoing'" ng-bind="formattedEndTime"> Days</h6>
+        <sapn class="sub-info-title time" ng-if="status === 'ongoing'">{{::lang.INFO_END}}</sapn>
+        <h6 class="sub-info-value" ng-if="status === 'past'">--</h6>
+        <sapn class="sub-info-title time" ng-if="status === 'past'">{{::lang.INFO_FINISHED}}</sapn>
+    </div>
+</div>

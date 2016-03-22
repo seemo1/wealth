@@ -1,0 +1,28 @@
+<div ng-controller="CoinController as coinCtrl" ng-init="" >
+
+    <div class="panel panel-default" >
+        <div class="panel-heading clearfix">
+            <h4 class="panel-title pull-left">Coin</h4>
+        </div>
+        <div class="panel-body">
+            <tabset justified="true">
+                <tab heading="Coin 分佈查詢">
+                    <ng-include src="'/components/coin/coin-distribution.html'"/>
+                </tab>
+                <tab heading="Coin 區間查詢">
+                    <ng-include src="'/components/coin/coin-range.html'"/>
+                </tab>
+                <tab heading="Coin 明細與紀錄">
+                    <ng-include src="'/components/coin/coin-log.html'"/>
+                </tab>
+                <tab heading="Coin 加減">
+                    <ng-include src="'/components/coin/coin-adjustment.html'"/>
+                </tab>
+                <tab heading="Coin 設定">
+                    <ng-include src="'/components/coin/coin-settings.html'"/>
+                </tab>
+            </tabset>
+        </div>
+    </div>
+
+</div>

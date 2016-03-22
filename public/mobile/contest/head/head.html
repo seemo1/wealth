@@ -1,0 +1,96 @@
+<div class="row margin-bottom-small contest-head">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="row tag tag-forex" ng-if="contest.market_code === 'FX'"><span class="tag-name-forex"><strong>{{::lang.FX}}</strong></span></div>
+            <div class="row tag tag-futures" ng-if="contest.market_code === 'FC'"><span class="tag-name-futures"><strong>{{::lang.FC}}</strong></span></div>
+            <div class="row tag tag-futures" ng-if="contest.market_code === 'FT'"><span class="tag-name-futures"><strong>{{::lang.FT}}</strong></span></div>
+            <div class="row tag tag-stock" ng-if="contest.market_code === 'SC'"><span class="tag-name-stock"><strong>{{::lang.SC}}</strong></span></div>
+            <div class="box-header b-b contest-head-body">
+                <div class="row contest-details">
+                    <div class="col-xs-3">
+                        <p><img ng-src="{{contest.icon_image || '/mobile/contest/styles/img/icon_contest_default.png'}}" class="img-circle w-64 img-responsive contest-img"></p>
+                    </div>
+                    <div class="col-xs-9">
+                        <div><span class="list-name" ng-bind="contest.name"></span></div>
+                        <a class="contest-details">
+                            <span class="pull-right contest-details">                                
+                                <i class="fa fa-angle-right text-contest-details contest-arrow"></i>
+                            </span>
+                        </a>
+                        <div>
+                            <span class="list-time" ng-bind="formattedStartTime"></span>
+                            -
+                            <span class="list-time" ng-bind="formattedEndTime"></span>
+                        </div>
+                        <a href="" ng-if="contest.progress_status === 'ongoing'"><span class="label label-ongoing">{{::lang.STATUS_ONGOING}}</span></a>
+                        <a href="" ng-if="contest.progress_status === 'upcoming'"><span class="label label-upcoming">{{::lang.STATUS_APPLYING}}</span></a>
+                        <a href="" ng-if="contest.progress_status === 'past'"><span class="label grey-300">{{::lang.STATUS_PAST}}</span></a>
+                        <a href="" ng-if="contest.join_status === true"><span class="label label-joined"><i class="fa fa-check text-white"></i> {{::lang.STATUS_JOINED}}</span></a>
+                    </div>
+                </div>
+            </div>
+            <div class="box-body no-padding-xs m-a-sm">
+                <div class="list-body" ng-if="contest.progress_status === 'upcoming' && contest.is_kicked === false">
+                    <sub-head-info-dir status='contest.progress_status'
+                                       joined="contest.join_status"
+                                       total-participants="contest.user_join_sum"
+                                       start-time="contest.start_date_time"
+                                       end-time="contest.end_date_time"
+                                       currency="contest.coin_mark"
+                                       prize="contest.current_money"></sub-head-info-dir>
+                </div>
+                <div class="list-body" ng-if="contest.progress_status === 'ongoing' && contest.is_kicked === false">
+                    <sub-head-stats-dir ng-if="contest.join_status"
+                                        status='contest.progress_status'
+                                        joined="contest.join_status"
+                                        score="contest.fdt_score"
+                                        score-stats="contest.fdt_score_status"
+                                        ranking="contest.fdt_ranking"
+                                        ranking-stats="contest.fdt_ranking_status"
+                                        global-rank="contest.fdt_competition"
+                                        global-rank-stats="contest.fdt_competition_compare_status"
+                                        start-time="contest.start_date_time"
+                                        end-time="contest.end_date_time"
+                                        prize="contest.current_money"></sub-head-stats-dir>
+                    <sub-head-info-dir ng-if="!contest.join_status && contest.is_kicked === false"
+                                       status='contest.progress_status'
+                                       joined="contest.join_status"
+                                       total-participants="contest.user_join_sum"
+                                       start-time="contest.start_date_time"
+                                       end-time="contest.end_date_time"
+                                       currency="contest.coin_mark"
+                                       prize="contest.current_money"></sub-head-info-dir>
+                </div>
+                <div class="list-body" ng-if="contest.progress_status === 'past'">
+                    <sub-head-stats-dir ng-if="contest.join_status && contest.is_kicked === false"
+                                        joined="contest.join_status"
+                                        status='contest.progress_status'
+                                        score="contest.fdt_score"
+                                        score-stats="contest.fdt_score_status"
+                                        ranking="contest.fdt_ranking"
+                                        ranking-stats="contest.fdt_ranking_status"
+                                        global-rank="contest.fdt_competition"
+                                        global-rank-stats="contest.fdt_competition_compare_status"
+                                        start-time="contest.start_date_time"
+                                        end-time="contest.end_date_time"
+                                        prize="contest.current_money"></sub-head-stats-dir>
+                    <sub-head-info-dir ng-if="!contest.join_status && contest.is_kicked === false"
+                                       status='contest.progress_status'
+                                       joined="contest.join_status"
+                                       total-participants="contest.user_join_sum"
+                                       start-time="contest.start_date_time"
+                                       end-time="contest.end_date_time"
+                                       currency="contest.coin_mark"
+                                       prize="contest.current_money"></sub-head-info-dir>
+                </div>
+                <div class="list-body" ng-if="contest.is_kicked">
+                    <sub-head-kicked-dir stop-loss="contest.stop_lose_setting"></sub-head-kicked-dir>
+                </div>
+                <div class="list-body" ng-if="!contest.verify && contest.joined">
+                    <sub-head-verify-dir></sub-head-verify-dir>
+                </div>
+            </div>
+            <div class="box-divider m-a-0"></div>
+        </div>
+    </div>
+</div>

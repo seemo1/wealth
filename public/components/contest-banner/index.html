@@ -1,0 +1,44 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>FDT Incubator</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/bower_components/angular-toggle-switch/angular-toggle-switch.css" />
+    <link rel="stylesheet" type="text/css" href="/bower_components/angular-toggle-switch/angular-toggle-switch-bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/bower_components/angular-wizard/dist/angular-wizard.min.css" />
+    <link rel="stylesheet" type="text/css" href="/styles/fdt.css" />
+    <link rel="stylesheet" type="text/css" href="/styles/fontello.css" />
+    <link rel="stylesheet" type="text/css" href="/styles/animation.css" />
+</head>
+<body ng-app="fdt.contest.banner">
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+<div ng-view></div>
+<script>window.jQuery || document.write('<script src="/bower_components/jquery/dist/jquery.min.js"><\/script>')</script>
+<script src="/bower_components/angular/angular.min.js"></script>
+<script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+<script src="/bower_components/angular-route/angular-route.js"></script>
+<script src="/bower_components/lodash/lodash.min.js"></script>
+<script src="/bower_components/moment/moment.js"></script>
+<script src="/bower_components/angular-toggle-switch/angular-toggle-switch.min.js"></script>
+<script src="/bower_components/angular-wizard/dist/angular-wizard.min.js"></script>
+<script src="/bower_components/ng-file-upload/ng-file-upload.min.js"></script>
+<script src="/bower_components/bootstrap-ui-datetime-picker/dist/datetime-picker.min.js"></script>
+<script src="/bower_components/angular-moment/angular-moment.js"></script>
+
+<script src="/components/contest-banner/banner-controller.js"></script>
+<script src="/components/contest-banner/edit/edit-banner-controller.js"></script>
+<script src="/components/directives/upload-file-directive.js"></script>
+<div class="container-fluid">
+    <header></header>
+    <div class="col-xs-12 col-md-12" ng-switch="dashboard.currentView">
+        <ng-include src="'/components/contest-banner/banner.html'"/>
+    </div>
+</div>
+</body>
+</html>

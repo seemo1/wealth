@@ -1,0 +1,40 @@
+<div ng-controller="ContestEditController as edit">
+    <h4>{{edit.contest.name}}</h4>
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            <a class="btn btn-success pull-right" ng-click="edit.save()" ng-disabled="edit.updating">Save</a>
+            <a class="btn btn-default pull-right" ng-click="edit.cancel()">Cancel</a>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            <tabset justified="true">
+                <tab heading="English Information">
+                    <ng-include src="'/components/contest/edit/contest-general-form-en.html'"/>
+                </tab>
+                <tab heading="比賽相關訊息(簡中)">
+                    <ng-include src="'/components/contest/edit/contest-general-form-cn.html'"/>
+                </tab>
+                <tab heading="比賽相關訊息(繁中)">
+                    <ng-include src="'/components/contest/edit/contest-general-form-tw.html'"/>
+                </tab>
+            </tabset>
+            <hr>
+            <tabset justified="true">
+                <tab heading="Date">
+                    <ng-include src="'/components/contest/edit/contest-date-form.html'"/>
+                </tab>
+                <tab heading="Prize">
+                    <ng-include src="'/components/contest/edit/contest-prize-form.html'"/>
+                </tab>
+                <tab heading="Condition">
+                    <ng-include src="'/components/contest/edit/contest-condition-form.html'"/>
+                </tab>
+                <tab heading="Additional">
+                    <ng-include src="'/components/contest/edit/contest-additional-form.html'"/>
+                </tab>
+            </tabset>
+        </div>
+    </div>
+</div>

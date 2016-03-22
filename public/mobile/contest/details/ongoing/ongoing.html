@@ -1,0 +1,58 @@
+<div class="app-body-inner-mt-0">
+    <div class="row animated slideInRight">
+        <div class="col-xs-12">
+            <details-head-dir contest="ongoingCtrl.contestDetail" shared="false"></details-head-dir>
+            <div class="alert alert-kicked no-margin-bottom margin-top-small"
+                 ng-if="ongoingCtrl.contestDetail.isKicked">
+                <i class="fa fa-warning text-white"></i> You have lost more than
+                {{::ongoingCtrl.contestDetail.stop_lose_setting}}%, so you have been withdrawn from the contest
+            </div>
+            <div ng-if="ongoingCtrl.contestDetail.join_status" class="margin-top-small b-b">
+                <performance-chart-dir                    
+                        data="ongoingCtrl.performanceData"
+                        user-performance="ongoingCtrl.userPerformance"
+                        is-kicked="ongoingCtrl.contestDetail.is_kicked"
+                        ></performance-chart-dir>
+            </div>
+            <prize-dir content="ongoingCtrl.contestDetail.reward_description"></prize-dir>
+            <div class="row" ng-if="ongoingCtrl.contestDetail.is_dynamic_reward">
+                <dynamic-reward-dir max-money="ongoingCtrl.contestDetail.dynamic_reward_max_money"
+                                    rise-money="ongoingCtrl.contestDetail.dynamic_reward_rise_money"
+                                    current-money="ongoingCtrl.contestDetail.current_money"
+                                    coin-mark="ongoingCtrl.contestDetail.coin_mark"></dynamic-reward-dir>
+            </div>
+            <top-performer-dir
+                    participants="ongoingCtrl.topPerformers"
+                    title="{{::ongoingCtrl.lang.TOP_PERFORMER}}"
+                    state="ongoingCtrl.topPerformersState"
+                    contest-id="ongoingCtrl.contestDetail.contest_id"
+                    mode="top"
+                    total-users="3010">
+            </top-performer-dir>
+            <top-performer-dir                    
+                    participants="ongoingCtrl.dailyTopPerformers"
+                    title="{{::ongoingCtrl.lang.DAILY_PERFORMER}}"
+                    state="ongoingCtrl.dailyTopPerformersState"
+                    contest-id="ongoingCtrl.contestDetail.contest_id"
+                    mode="dailyTop"
+                    total-users="2938">
+            </top-performer-dir>
+            <contest-rule-dir contest="ongoingCtrl.contestDetail">
+            </contest-rule-dir>
+        </div>
+    </div>
+</div>
+<div class="app-footer">
+    <div class="row animated slideInRight">
+        <div class="col-xs-12">
+            <div class="box p-a-custom-sm text-center grey-500 no-margin-bottom b-b join-block">
+                <a class="btn btn-block custom-button-color"
+                   ng-if="!ongoingCtrl.joinStatus"
+                   ng-href="{{ongoingCtrl.joinUrl}}">{{::ongoingCtrl.lang.JOIN_NOW}}</a>
+            <span class="btn btn-block grey-400 text-white"
+                  ng-if="ongoingCtrl.joinStatus">{{::ongoingCtrl.lang.BUTTON_APPLIED}}
+            </span>
+            </div>
+        </div>
+    </div>
+</div>

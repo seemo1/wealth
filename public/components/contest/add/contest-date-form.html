@@ -1,0 +1,26 @@
+<h4>步驟1 : 設定比賽開始以及結束時間（請用交易日GMT+0的概念輸入）</h4>
+<div class="row">
+    <div class="col-xs-4 col-md-4 col-md-offset-1 col-xs-offset-1 text-center">
+        <p class="bg-primary">開始時間 : {{addContest.startDate | date: 'yyyy-MM-dd'}}</p>
+        <!--
+        <p >Start Time: {{addContest.newContest.start_date_time}}</p>
+        -->
+        <datepicker ng-model="addContest.startDate"
+                    ng-style="{'display': 'inline-block'}"
+                    show-weeks="true" class="well well-sm"></datepicker>
+    </div>
+    <div class="col-xs-4 col-md-4 col-md-offset-1 col-xs-offset-1 text-center">
+        <p class="bg-primary">結束時間 : {{addContest.endDate | date: 'yyyy-MM-dd'}}</p>
+        <!--
+        <p>End Time: {{addContest.newContest.end_date_time}}</p>
+        -->
+        <datepicker ng-model="addContest.endDate"
+                    ng-style="{'display': 'inline-block'}"
+                    show-weeks="true" class="well well-sm"></datepicker>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-md-12">
+        <button class="btn btn-primary btn-md pull-right" ng-click="addContest.setTime()" >下一步</button>
+    </div>
+</div>

@@ -1,0 +1,107 @@
+<tabset justified="true">
+    <tab heading="Bundle file list">
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Product</th>
+                <th>Platform</th>
+                <th>Environment</th>
+                <th>File name</th>
+                <th>Version</th>
+                <th>MD5</th>
+                <th>Last update time</th>
+                <th class="text-center">Download</th>
+                <th>Copy File</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="b in bundle.bundleList track by $index">
+                <td>{{$index + 1}}</td>
+                <th>{{b.product}}</th>
+                <th>{{b.platform}}</th>
+                <th>{{b.environment}}</th>
+                <td>{{b.file_name}}</td>
+                <th>{{b.version}}</th>
+                <td><a title="{{b.file_md5}}">MD5</a></td>
+                <td>{{b.last_update_time}}</td>
+                <td class="text-center"><span class="glyphicon glyphicon-save" ng-click="bundle.downloadBundleVersion($index)"></span></td>
+                <td>
+                    <select ng-model="bundle.copyEnv[$index]"><option ng-repeat = "env in bundle.environments">{{env}}</option></select>
+                    <button ng-click="bundle.copyFile($index)">Copy</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </tab>
+    <tab heading="Version list" select="bundle.loadVersionList()">
+        <br>
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <form class="form-inline">
+                    <div class="col-md-3 col-xs-3">
+                        <div class="form-group input-group-sm">
+                            <select class="form-control"
+                                    id="product"
+                                    ng-model="bundle.versionList.product"
+                                    ng-change="bundle.loadVersionList()">
+                                <option ng-repeat="product in bundle.versionList.products">{{product}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <div class="form-group input-group-sm">
+                            <select class="form-control"
+                                    id="platform"
+                                    ng-model="bundle.versionList.platform"
+                                    ng-change="bundle.reloadVersionList()">
+                                <option ng-repeat="platform in bundle.versionList.platforms">{{platform}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <div class="form-group input-group-sm">
+                            <select class="form-control"
+                                    id="version"
+                                    ng-model="bundle.versionList.version"
+                                    ng-change="bundle.reloadVersionListInfo()">
+                                <option ng-repeat="version in bundle.versionList.versions">{{version}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-xs-3">
+                        <div class="form-group input-group-sm">
+                            <select class="form-control"
+                                    id="environment"
+                                    ng-model="bundle.versionList.environment">
+                                <option ng-repeat="environment in bundle.versionList.environments">{{environment}}</option>
+                            </select>
+                            <button type="button" class="btn btn-success btn-sm" ng-click="bundle.updateVersion()">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <br />
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>App Id</th>
+                <th>Last update time</th>
+                <th class="text-center" ng-show="bundle.versionList.environment === 'PROD'">Is Version Check</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="v in bundle.versionListInfo track by $index">
+                <td>{{$index + 1}}</td>
+                <th>{{v.appid}}</th>
+                <td>{{v.last_update_time}}</td>
+                <th class="text-center"><input type="checkbox" ng-click="bundle.updateVersionCheck($index)"
+                                               ng-show="bundle.versionList.environment === 'PROD'"
+                                               ng-model="v.is_version_check" ng-init="v.is_version_check" ng-true-value="'Y'" ng-false-value="'N'" /></th>
+            </tr>
+            </tbody>
+        </table>
+    </tab>
+</tabset>

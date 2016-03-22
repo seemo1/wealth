@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html ng-app="fdt.mobile.contest">
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, maximum-scale=1, minimal-ui" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- for ios 7 style, multi-resolution icon of 152x152 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
+    <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <script>
+        window.market = "{{market}}";
+        window.language = "{{language}}";
+        window.availableMarkets = "{{availableMarkets}}";
+        window.userIdentity = "{{userIdentity}}";
+        window.appProtocol = "{{protocol}}";
+        window.platform = "{{platform}}";
+        if(!window.market) {window.market = 'global';}
+        if(!window.language) {window.language = 'en';}
+        if(!window.userIdentity) {window.userIdentity = 'guest';}
+        if(!window.appProtocol) {window.appProtocol = 'forexmaster';}
+        if(!window.platform) {window.platform = 'android';}
+    </script>
+    <link rel="stylesheet" href="/mobile/contest/styles/main.css" type="text/css" />
+    <link rel="stylesheet" href="{{cssSrc}}" type="text/css" />
+    <title>{{title}}</title>
+</head>
+<body ng-cloak>
+<div class="ui-view-container">
+    <div ng-show='stateIsLoading' class="h-v row-col">
+        <div class="row-cell v-m text-center">
+            <div class="m-b">
+                <div class="m-t-md font-bold">
+                    <img src="/mobile/contest/styles/img/loading_{{market}}.gif" class="loading-img" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div ui-view autoscroll="true" ng-show='!stateIsLoading' ></div>
+
+<script src="/bower_components/Chart.js/Chart.min.js"></script>
+<script src="/bower_components/lodash/lodash.min.js"></script>
+<script src="/bower_components/angular/angular.min.js"></script>
+<script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+<script src="/bower_components/angular-strap/dist/angular-strap.min.js"></script>
+<script src="/bower_components/angular-animate/angular-animate.min.js"></script>
+<script src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
+<script src="/bower_components/tc-angular-chartjs/dist/tc-angular-chartjs.min.js"></script>
+<script src="/bower_components/moment/min/moment.min.js"></script>
+<script src="/bower_components/angular-moment/angular-moment.js"></script>
+<script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="/bower_components/modernizr/modernizr.min.js"></script>
+<script src='/mobile/contest/libs/lazy-scroll.js'></script>
+<script src='/mobile/contest/libs/nav.js'></script>
+<script src='/mobile/contest/languages/language-en.js'></script>
+<script src='/mobile/contest/languages/language-cn.js'></script>
+<script src='/mobile/contest/languages/language-tw.js'></script>
+<script src='/mobile/contest/languages/language.js'></script>
+<script src='/mobile/contest/services/user-service.js'></script>
+<script src='/mobile/contest/services/api-service.js'></script>
+<script src='/mobile/contest/services/utilities-service.js'></script>
+<script src='/mobile/contest/main/main-controller.js'></script>
+<script src='/mobile/contest/list/list-directive.js'></script>
+<script src='/mobile/contest/head/head-directive.js'></script>
+<script src='/mobile/contest/nav/nav-directive.js'></script>
+<script src='/mobile/contest/bulletin/bulletin-directive.js'></script>
+<script src='/mobile/contest/banner/banner-directive.js'></script>
+<script src='/mobile/contest/head/sub-head-info.js'></script>
+<script src='/mobile/contest/head/sub-head-kicked.js'></script>
+<script src='/mobile/contest/head/sub-head-verify.js'></script>
+<script src='/mobile/contest/head/sub-head-stats.js'></script>
+<script src='/mobile/contest/bulletin/bulletin-controller.js'></script>
+<script src='/mobile/contest/rules/rules-controller.js'></script>
+<script src='/mobile/contest/details/ongoing/ongoing-controller.js'></script>
+<script src='/mobile/contest/details/upcoming/upcoming-controller.js'></script>
+<script src='/mobile/contest/details/past/past-controller.js'></script>
+<script src='/mobile/contest/details/details-head-directive.js'></script>
+<script src='/mobile/contest/share/share-controller.js'></script>
+<script src='/mobile/contest/top-performer/top-performer-directive.js'></script>
+<script src='/mobile/contest/contest-rule/contest-rule-directive.js'></script>
+<script src='/mobile/contest/performance-chart/performance-chart-directive.js'></script>
+<script src='/mobile/contest/prize/prize-directive.js'></script>
+<script src='/mobile/contest/participant/participant-directive.js'></script>
+<script src='/mobile/contest/participant/participant-controller.js'></script>
+<script src='/mobile/contest/all-contest/all-contest-controller.js'></script>
+<script src='/mobile/contest/user-contest/user-contest-controller.js'></script>
+<script src='/mobile/contest/dynamic-reward/dynamic-reward-directive.js'></script>
+<script src='/mobile/contest/performer-list/performer-list-controller.js'></script>
+<script src='/mobile/contest/popup/popup-controller.js'></script>
+<script src='/mobile/contest/error/error-controller.js'></script>
+<script src='/mobile/contest/details/proxy/details-proxy-controller.js'></script>
+<script src='/mobile/contest/app.js'></script>
+<script src="js/fdt.min.js"></script>
+</body>
+</html>
+<script>
+//app use function list
+function setToken(token) {
+  if(!token)
+    return false;
+  localStorage.setItem('token', token);
+  return true;
+}
+
+function requestToken(){
+  top.location = window.appProtocol + "://fdt/request/getToken";
+}
+
+function onMyContest(error, protocol, platform, token, country, language) {
+  if(setToken(token)){
+    //hack to call angular control function....Orz.
+    angular.element(document.getElementById("contest-main")).scope().contestCtrl.goContest();
+  } else {
+    alert("error:" + error +", protocol:" + protocol + ", token:" + token + ", country:" + country + ", language:" +language);
+  }
+}
+</script>

@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-9">
+                        <h5>Contest Bulletin List</h5>
+                    </div>
+                    <div class="col-xs-3">
+                        <select ng-model="adBulletinListCtrl.selectedLanguages"
+                                class="form-control"
+                                ng-change="adBulletinListCtrl.get()"
+                                ng-options="language.name for language in adBulletinListCtrl.languages">
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-responsive table-bordered">
+                    <thead>
+                        <tr>
+                            <td class="text-center">Sequence</td>
+                            <td class="text-center">Title</td>
+                            <td class="text-center">Language</td>
+                            <td class="text-center">Link</td>
+                            <td class="text-center">Start Time</td>
+                            <td class="text-center">End Time</td>
+                            <td class="text-center">Delete</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="bulletin in adBulletinListCtrl.bulletins">
+                            <td class="text-center">{{bulletin.seq}}</td>
+                            <td>{{bulletin.title}}</td>
+                            <td>{{bulletin.language}}</td>
+                            <td>{{bulletin.link}}</td>
+                            <td>{{bulletin.start_date_time * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                            <td>{{bulletin.end_date_time * 1000 | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                            <td class="text-center">
+                                <span ng-click="adBulletinListCtrl.delete($index)"><i class="glyphicon glyphicon-trash red"></i></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

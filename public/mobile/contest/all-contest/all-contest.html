@@ -1,0 +1,24 @@
+<!-- <nav-dir title="listAllCtrl.lang.ALL_CONTEST"></nav-dir> -->
+<div class="clearfix nav-active-success sticky-sub-nav">
+    <ul class="nav nav-md row" ui-nav="" ng-if="listAllCtrl.availableMarkets.length > 1">
+        <li class="nav-item text-center {{listAllCtrl.rowClass}}"
+            ng-repeat="market in listAllCtrl.availableMarkets"
+            ng-class="{'active': listAllCtrl.selectedMarket === market}">
+            <a class="nav-link block" href="" ng-click="listAllCtrl.switchMarket(market)">
+                {{::listAllCtrl.lang[market]}}
+            </a>
+        </li>
+    </ul>
+</div>
+<div class="app-body-inner-mb-0 body-has-sub-nav">
+    <div class="row animated slideInRight"
+         lazy-scroll="listAllCtrl.loadMore()"
+         lazy-scroll-trigger="100"
+         lazy-no-scroll="listAllCtrl.loading || listAllCtrl.noMore">
+        <div class="col-xs-12">
+            <div>
+                <list-dir contests="listAllCtrl.contests"></list-dir>
+            </div>
+        </div>
+    </div>
+</div>
