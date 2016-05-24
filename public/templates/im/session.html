@@ -1,0 +1,63 @@
+<div class="im-session hidden">
+  <div class="im-session-header">
+    <div class="im-header-left"><img class="im-header-user-avatar" src="/css/img/icon_user_default.png"/></div>
+    <div class="im-header-center">
+      <div class="im-session-header-name"></div>
+      <div class="im-session-header-app">財富管家</div>
+    </div>
+    <div class="im-header-right"></div>
+  </div>
+  <div class="im-message-block">
+    <template id="im-message-list-template">
+      <ul class="im-message-list">
+        <template id="im-message-template">
+          <li class="im-message">
+              <div class="bubble">
+                <div class="im-message-text"></div>
+                <div class="im-message-time"></div>
+              </div>
+              <!-- <div class="im-status"></div> -->
+          </li>
+        </template>
+      </ul>
+    </template>
+  </div>
+  <div class="im-post-block">
+    <div class="im-post-tools">
+      <a id="im-btn-canned-text" title="選取文字素材" data-toggle="tooltip" data-placement="top" ><i class="fa fa-file-text-o" aria-hidden="true"></i></a> <a id="im-btn-canned-image" title="選取圖片素材" data-toggle="tooltip" data-placement="top" ><i class="fa fa-file-image-o" aria-hidden="true"></i></a> <a id="im-btn-file" title="附件上傳" data-toggle="tooltip" data-placement="top" ><i class="fa fa-paperclip" aria-hidden="true"></i></a>
+    </div>
+    <form id="im-form-post" class="im-form-post">
+      <textarea class="im-post-message" placeholder="請輸入文字" required></textarea>
+      <button type="submit" class="im-btn-post btn btn-wm">發送</button>
+       (使用 Alt + Enter 發送訊息)
+    </form>
+  </div>
+</div>
+<template id="im-progress-template">
+  <div class="im-progress progress">
+    <div class="im-progress-bar progress-bar">
+    </div>
+  </div>
+</template>
+<template id="im-canned-text-template">
+  <div class="im-canned-text">
+    <ul class="im-canned-text-list">
+      <template id="im-canned-text-item-template">
+        <li class="im-canned-text-item">
+        </li>
+      </template>
+    </ul>
+  </div>
+</template>
+<template id="im-canned-image-template">
+  <div class="im-canned-image">
+    <ul class="im-canned-image-list">
+      <template id="im-canned-image-item-template">
+        <li class="im-canned-image-item">
+          <img src="" alt="" class="im-canned-image">
+        </li>
+      </template>
+    </ul>
+    <a class="more hide-block">更多</a>
+  </div>
+</template>

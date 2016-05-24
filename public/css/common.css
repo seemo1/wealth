@@ -1,0 +1,166 @@
+html {
+  height: 100%;
+  font-size: 16px;
+}
+
+body {
+  font-family: "segoe ui", Helvetica, Arial, "WenQuanYi Zen Hei", "Apple LiGothic Medium", "Microsoft JhengHei", sans-serif;
+  padding-top: 3.125rem;
+  height: 100%;
+  font-size: 1rem;
+  color: #292006;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: #544D38;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #544D38;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #544D38;
+  text-decoration: none;
+}
+
+a:active {
+  color: #544D38;
+  text-decoration: none;
+}
+
+a img {
+  border: 0;
+}
+
+.hide {
+  display: none;
+}
+
+.hide-block {
+  visibility: hidden;
+}
+
+.clear {
+  clear: both;
+}
+
+.table {
+  display: table;
+  width: 100%;
+}
+
+.table-tr {
+  display: table-row;
+}
+
+.table-td {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.wrapper {
+  min-height: 100%;
+  width: 100%;
+  margin-bottom: -3.750rem;
+  padding: 1.250rem 0 4.750rem;
+}
+
+.footer {
+  background-color: #f8f8f8;
+  bottom: 0;
+  height: 3.750rem;
+  width: 100%;
+  padding-top: 1rem;
+}
+
+.modal-no-border {
+  border: 0;
+}
+
+.modal-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.nav-left {
+  margin-bottom: 1rem;
+  box-shadow: 0 0 0.250rem 0.0625rem rgba(0, 0, 0, 0.08);
+  border: 0.0625rem solid #efefef;
+}
+
+.nav-left li {
+  padding: 0.500rem 0.750rem;
+}
+
+.nav-left > li {
+  /*background: #CEA321;*/
+  color: #CEA321;
+}
+
+.btn-wm {
+  color: #fefefe;
+  background-color: #CEA321;
+  border-color: #CEA321;
+}
+
+.btn-wm:hover {
+  color: #CEA321;
+  background-color: #fefefe;
+  /*border-color: #fefefe;*/
+}
+
+.btn-wm:focus {
+  color: #CEA321;
+  background-color: #fefefe;
+  /*border-color: #fefefe;*/
+}
+
+
+/* not refactory */
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+  font-size: 1rem;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

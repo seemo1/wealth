@@ -1,0 +1,63 @@
+{% extends '../templates/main-layout.html' %}
+
+{% block title %}{{i18n.__('managerTitle')}}{% endblock %}
+
+{% block head %}
+  {% parent %}
+{% endblock %}
+
+{% block content %}
+
+<div class="wrapper">
+  <div class="container">
+    <form id="login" class="form-signin">
+      <h2 class="form-signin-heading">{{i18n.__('managerTitle')}}</h2>
+      <label for="inputEmail" class="sr-only">FDT ID</label>
+      <input type="text" id="inputId" class="form-control" placeholder="FDT ID" required autofocus>
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+    <!--   <div class="checkbox">
+        <label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+      </div> -->
+      <button id="btn-login" class="btn btn-lg btn-wm btn-block" type="submit" >{{i18n.__('signIn')}}</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block script %}
+  {% parent %}
+
+  <script>
+    'use strict';
+
+    var storageNim = new fdt.SessionStorage('nim');
+    $( "#login" ).submit(function( event ) {
+      event.preventDefault();
+      login();
+    });
+
+    function login() {
+      var id = $('#inputId').val();
+      var password = $('#inputPassword').val();
+      if (id && password) {
+        fdt.http.post( "/api/auth/v0/login", {user_id:id})
+        .done( function( data ) {
+
+          storageNim.set({
+            account : data.result.yun_uid,
+            token   : data.result.token
+          });
+          window.location.href = "/manager";
+        })
+        .fail(function(err) {
+          fdt.alert(err.responseText);
+        });
+      }
+    }
+  </script>
+{% endblock %}
+

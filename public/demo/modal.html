@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- <link rel="icon" href="../../favicon.ico"> -->
+    <title></title>
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/common.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">FDT</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class=""><a href="#"></a></li>
+            <li class=""><a href="#"></a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class=""><a href="#"></a></li>
+            <li class=""><a href="#"></a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container wrapper">
+      <button type="button" onclick="helloModal()" >hello modal</button>
+      <button type="button" onclick="alertModal()" >alert</button>
+      <button type="button" onclick="confirmModal()" >confirm</button>
+      <button type="button" onclick="confirmModal2()" >confirm</button>
+      <button type="button" onclick="formModal.modal('show')" >formModal</button>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <p class="text-muted">All Rights Reserved © 2015</p>
+      </div>
+    </footer>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/js/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/fdt.js"></script>
+    <script>
+      var modal = {};
+      function closeModal() {
+        modal.modal('hide');
+      }
+
+      function helloModal() {
+        modal = fdt.modal({
+          title: 'Hello',
+          body:'Hello World !!!',
+          footer:'<button type="button" onclick="closeModal()" >close modal</button>',
+        });
+      }
+
+      function alertModal() {
+        fdt.alert('This is alert');
+      }
+
+
+      var cModal;
+      function confirmModal() {
+        cModal = fdt.confirm('Are you sure?', function(result) {
+          alert(result);
+          this.modal('hide');
+        });
+      }
+
+      function confirmModal2() {
+        cModal2 = fdt.confirm('confirmModal2: Are you sure2?', function(result) {
+          alert('modal2' + result);
+          this.modal('hide');
+        });
+      }
+      // http://getbootstrap.com/javascript/#modals-events
+      var formModal = fdt.modal({
+        id: 'form-modal',
+        title: 'Please input',
+        body: [ '<form>',
+                ' <div class="form-group">',
+                '   <label class="control-label">Email:</label>',
+                '   <input type="text" class="form-control" id="email">',
+                ' </div>',
+                ' <div class="form-group">',
+                '   <label class="control-label">Message:</label>',
+                '   <textarea class="form-control" id="message"></textarea>',
+                ' </div>',
+                '</form>'
+        ].join('\n'),
+        footer: '<button type="button" onclick="formModal.modal(\'hide\')" >close modal</button>',
+        show: false
+      });
+
+      formModal.on('shown.bs.modal', function(event){
+        console.log('shown.bs.modal');
+        var that = $(this);
+        that.find('#email').val('service@hkfdt.com');
+        that.find('#email').focus();
+      });
+
+    </script>
+  </body>
+</html>

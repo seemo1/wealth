@@ -1,0 +1,66 @@
+{% extends '../templates/main-layout.html' %}
+
+{% block title %}{{i18n.__('managerTitle')}}{% endblock %}
+
+{% block head %}
+  {% parent %}
+  <link href="/css/im.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+  <div class="wrapper">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <ul class="nav-left">
+            <li>功能</li>
+            <li>客戶管理</li>
+            <div class="im-friend-block">
+            </div>
+            <li>臨時客戶</li>
+          </ul>
+        </div>
+        <div id="im-height" class="col-md-9">
+          <div class="im-session-block">
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block script %}
+  {% parent %}
+  <script src="/js/moment.min.js"></script>
+  <script src="/js/NIM/Web_SDK_Base_v2.1.0.js"></script>
+  <script src="/js/NIM/Web_SDK_NIM_v2.1.0.js"></script>
+  <!-- <script src="/js/NIM/Web_SDK_Chatroom_v2.1.0.js"></script> -->
+  <!-- 以下有順序性，請勿使用 defer async-->
+  <script src="/js/fdt-ui.js"></script>
+  <script src="/js/fdt-ui-im.js"></script>
+  <script src="/js/fdt-nim.js"></script>
+  <script src="/js/Autolinker.min.js"></script>
+  <script>
+    'use strict';
+
+    var storageNim = new fdt.SessionStorage('nim');
+    var nim;
+    $( document ).ready(function() {
+      var session = new fdt.ui.im.Session('.im-session-block');
+      var friendList = new fdt.ui.im.FriendList('.im-friend-block');
+      nim = new fdt.NIM(storageNim.get(), {
+        session: session,
+        friendList: friendList
+      });
+      setTimeout(function(){
+        $('.im-session-block').css({
+          height: $('.wrapper').height() + 'px'
+        });
+        $('[data-toggle="tooltip"]').tooltip();
+      }, 1);
+    });
+  </script>
+{% endblock %}
+
