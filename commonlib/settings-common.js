@@ -1,68 +1,67 @@
 'use strict';
 
-var systemSettings = {};
-var Promise = require('bluebird');
-var tableName = 'system_settings';
-var _ = require('lodash');
-var logger = require('../utils/logger');
-var logTag = '[System Settings]';
-
-systemSettings.data = [];
-
 /**
  *
- * @param type
- * @param key
- * @returns {*}
+ * 處理讀取系統公用設定值
+ *
+ * Author: seemo
+ * Date: 2016/3/31
+ *
  */
-systemSettings.get = function(type, key) {
-  var setting = _.where(systemSettings.data, {key_code: key, type: type});
-  if (setting.length <= 0) {
-    return null;
-  }  else {
-    return setting[0].value;
+const _ = require('lodash');
+const Logger = require('./logger');
+const logTag = '[System Settings]';
+
+class SystemSettings{
+  constructor(){
+    this._settings = [];
   }
-};
 
-/**
- * get Setting, return defValue if null
- * @param type
- * @param key
- * @param defValue
- * @returns {*}
- */
-systemSettings.getD = function(type, key, defValue) {
-  var setting = _.where(systemSettings.data, {key_code: key, type: type});
-  if (setting.length <= 0) {
-    logger.warn(logTag, 'getD type : ' + type + ', key : ' + key + ' not found! Please check system setting');
-    return defValue;
-  }  else {
-    return setting[0].value;
+  //取設定值
+  get(type, key, defaultValue){
+    let that = this;
+    let result = null;
+
+    let setting = _.find(that._settings, {key_code: key, type: type});
+    if (setting === undefined) {
+      Logger.info(logTag, 'get type : ' + type + ', key : ' + key + ' not found! Please check system setting');
+      if(defaultValue != undefined){
+        result = defaultValue;
+      }
+    }  else {
+      result = setting.value;
+    }
+    return result;
   }
-};
 
-systemSettings.getAll = function() {
-  return systemSettings.data;
-};
+  //讀出全部設定值
+  getAll() {
+    return this._settings;
+  };
 
-systemSettings.loadFromMysql = function() {
-  return new Promise(function(resolve, reject) {
-    mysqlCentralClient.query('SELECT * FROM ' + centraldb.get('DEFAULT') +'.'+tableName, function(err, res) {
-      if (err) {
-        logger.error(logTag, 'Cannot load system settings!!'.red);
-        return reject(err);
-      }
+  //共用設定知始化，載入所有設定值到momory
+  initial() {
+    let that = this;
+    return new Promise(function(resolve, reject) {
+    MySqlConn.query(logTag, 'SELECT type, key_code, value FROM system_settings', [])
+        .then(function(res) {
+            if (res.length > 0) {
+              that._settings = res;
+              Logger.info('system settings is loaded.')
+              let msg = 'System settings loaded';
+              return resolve(msg)
+            } else {
+              logger.error(logTag, 'load', 'cannot get system settings');
+              let msg = 'can not load system settings';
+              return reject(msg);
+            }
+          })
+        })
+        .catch(function(err){
+          Logger.error(err);
+          return reject(err);
+        });
+  };
+}
 
-      if (res.length > 0) {
-        systemSettings.data = res;
-        resolve('System settings loaded');
-      }      else {
-        logger.error(logTag, 'load', 'cannot get system settings');
-        reject('cannot load system settings');
-      }
-
-    });
-  });
-};
-
-module.exports = systemSettings;
+module.exports = SystemSettings;

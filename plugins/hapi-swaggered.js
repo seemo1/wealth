@@ -6,7 +6,7 @@ module.exports = function(server) {
     register: require('hapi-swaggered'),
     options: {
       requiredTags: ['social'],  //有此標籤的路徑才會有api docs(swagger)
-      responseValidation: false, //不驗證輸出資料格式
+      responseValidation: true, //驗證輸出資料格式
       produces: aryMime, //可輸出的格式
       consumes: aryMime, //可輸入的資料格式s
       tagging: {

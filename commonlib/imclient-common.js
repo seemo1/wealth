@@ -4,9 +4,9 @@
 'use strict';
 
 var Config = require('config');
-var encryptor = require('../utils/encrypt-util');
-var imclient = {};
-var imConfig = {
+var Encryptor = require('./encrypt-util');
+var IMClient = {};
+var IMConfig = {
   uri: Config.get('IMClient.uri'),
   appKey: Config.get('IMClient.appKey'),
   appSecret: Config.get('IMClient.appSecret'),
@@ -14,7 +14,7 @@ var imConfig = {
   iv: Config.get('IMClient.iv'),
 
 };
-var nonce = encryptor.genRandomStr(10);
+var nonce = Encryptor.genRandomStr(10);
 var userCreate = 'user/create.action';
 var userUpdate = 'user/update.action';
 var checkOnline = 'user/checkOnline.action';
@@ -27,10 +27,11 @@ var sendMsgOpe = '0';
 var textMsgType = 0;
 var jpgMsgType = 1;
 var voiceMsgType = 2;
-var vedioMsgType = 3;
+var videoMsgType = 3;
 var geoMsgType = 4;
 var thirdPartyMsgType = 100;
 var httpClient = {};
+var request = require('request');
 
 httpClient.post = function(url, headers, formData, callback) {
   var options = {
@@ -41,15 +42,45 @@ httpClient.post = function(url, headers, formData, callback) {
     options.headers = headers;
   if (formData)
     options.formData = formData;
+  console.log(options);
   request(options, callback);
 };
 
-imclient.createAccount = function(userID, name, props, icon, callback)
+IMClient.createAccount = function(user_id, name, props, icon, callback)
 {
   var currTm  = Date.now();
-  var accid = userID;
-  var token = encryptor.aesCBCEncrypt(userID, imConfig.tokenSalt, imConfig.iv);
-  var checkSum = encryptor.sha1Hash(imConfig.appSecret + nonce + currTm);
+  var accid = user_id;
+  //var token = Encryptor.aesCBCEncrypt(user_id, IMConfig.tokenSalt, IMConfig.iv);
+  //console.log('token=',token);
+  var checkSum = Encryptor.sha1Hash(IMConfig.appSecret + nonce + currTm);
+
+  var formData = {
+    accid:accid,
+    name:name,
+    //token:token,
+  };
+
+  if (icon)
+      formData['icon'] = icon;
+
+  if (props)
+      formData['props'] = props;
+
+  var headers = genHeaders(IMConfig.appKey, nonce, currTm, checkSum);
+
+  httpClient.post(IMConfig.uri + userCreate, headers, formData, function(err, httpResponse, body)
+  {
+  console.log('imbody : ',body);
+    genRtnMsg(callback, body);
+  });
+};
+
+IMClient.updateAccount = function(user_id, name, props, icon, callback)
+{
+  var currTm  = Date.now();
+  var accid = user_id;
+  var token = Encryptor.aesCBCEncrypt(user_id, IMConfig.tokenSalt, IMConfig.iv);
+  var checkSum = Encryptor.sha1Hash(IMConfig.appSecret + nonce + currTm);
 
   var formData = {
     accid:accid,
@@ -63,139 +94,112 @@ imclient.createAccount = function(userID, name, props, icon, callback)
   if (props)
       formData['props'] = props;
 
-  var headers = genHeaders(imConfig.appKey, nonce, currTm, checkSum);
+  var headers = genHeaders(IMConfig.appKey, nonce, currTm, checkSum);
 
-  httpClient.post(imConfig.uri + userCreate, headers, formData, function(err, httpResponse, body)
+  httpClient.post(IMConfig.uri + userUpdate, headers, formData, function(err, httpResponse, body)
   {
     genRtnMsg(callback, body);
   });
 };
 
-imclient.updateAccount = function(userID, name, props, icon, callback)
+IMClient.checkOnline = function(user_id, callback)
 {
   var currTm  = Date.now();
-  var accid = userID;
-  var token = encryptor.aesCBCEncrypt(userID, imConfig.tokenSalt, imConfig.iv);
-  var checkSum = encryptor.sha1Hash(imConfig.appSecret + nonce + currTm);
-
-  var formData = {
-    accid:accid,
-    name:name,
-    token:token,
-  };
-
-  if (icon)
-      formData['icon'] = icon;
-
-  if (props)
-      formData['props'] = props;
-
-  var headers = genHeaders(imConfig.appKey, nonce, currTm, checkSum);
-
-  httpClient.post(imConfig.uri + userUpdate, headers, formData, function(err, httpResponse, body)
-  {
-    genRtnMsg(callback, body);
-  });
-};
-
-imclient.checkOnline = function(userID, callback)
-{
-  var currTm  = Date.now();
-  var accid = userID;
-  var checkSum = encryptor.sha1Hash(imConfig.appSecret + nonce + currTm);
+  var accid = user_id;
+  var checkSum = Encryptor.sha1Hash(IMConfig.appSecret + nonce + currTm);
 
   var formData = {
     accid:accid,
   };
 
-  var headers = genHeaders(imConfig.appKey, nonce, currTm, checkSum);
+  var headers = genHeaders(IMConfig.appKey, nonce, currTm, checkSum);
 
-  httpClient.post(imConfig.uri + checkOnline, headers, formData, function(err, httpResponse, body)
+  httpClient.post(IMConfig.uri + checkOnline, headers, formData, function(err, httpResponse, body)
   {
     genRtnMsg(callback, body);
   });
 };
 
-imclient.refreshToken = function(userID, callback)
+IMClient.refreshToken = function(user_id, callback)
 {
   var currTm  = Date.now();
-  var accid = userID;
-  var checkSum = encryptor.sha1Hash(imConfig.appSecret + nonce + currTm);
+  var accid = user_id;
+  var checkSum = Encryptor.sha1Hash(IMConfig.appSecret + nonce + currTm);
 
   var formData = {
     accid:accid,
   };
 
-  var headers = genHeaders(imConfig.appKey, nonce, currTm, checkSum);
+  var headers = genHeaders(IMConfig.appKey, nonce, currTm, checkSum);
 
-  httpClient.post(imConfig.uri + refreshToken, headers, formData, function(err, httpResponse, body)
+  httpClient.post(IMConfig.uri + refreshToken, headers, formData, function(err, httpResponse, body)
   {
     genRtnMsg(callback, body);
   });
 };
 
-imclient.block = function(userID, callback)
+IMClient.block = function(user_id, callback)
 {
   var currTm  = Date.now();
-  var accid = userID;
-  var checkSum = encryptor.sha1Hash(imConfig.appSecret + nonce + currTm);
+  var accid = user_id;
+  var checkSum = Encryptor.sha1Hash(IMConfig.appSecret + nonce + currTm);
 
   var formData = {
     accid:accid,
   };
 
-  var headers = genHeaders(imConfig.appKey, nonce, currTm, checkSum);
+  var headers = genHeaders(IMConfig.appKey, nonce, currTm, checkSum);
 
-  httpClient.post(imConfig.uri + block, headers, formData, function(err, httpResponse, body)
+  httpClient.post(IMConfig.uri + block, headers, formData, function(err, httpResponse, body)
   {
     genRtnMsg(callback, body);
   });
 };
 
-imclient.unblock = function(userID, callback)
+IMClient.unblock = function(user_id, callback)
 {
   var currTm  = Date.now();
-  var accid = userID;
-  var checkSum = encryptor.sha1Hash(imConfig.appSecret + nonce + currTm);
+  var accid = user_id;
+  var checkSum = Encryptor.sha1Hash(IMConfig.appSecret + nonce + currTm);
 
   var formData = {
     accid:accid,
   };
 
-  var headers = genHeaders(imConfig.appKey, nonce, currTm, checkSum);
+  var headers = genHeaders(IMConfig.appKey, nonce, currTm, checkSum);
 
-  httpClient.post(imConfig.uri + unblock, headers, formData, function(err, httpResponse, body)
+  httpClient.post(IMConfig.uri + unblock, headers, formData, function(err, httpResponse, body)
   {
     genRtnMsg(callback, body);
   });
 };
 
-imclient.sendTextMsg = function(fromID, toID, body, callback)
+IMClient.sendTextMsg = function(fromID, toID, body, callback)
 {
   _sendMsg(fromID, toID, textMsgType, body, callback);
 };
 
-imclient.sendJpgMsg = function(fromID, toID, body, callback)
+IMClient.sendJpgMsg = function(fromID, toID, body, callback)
 {
   _sendMsg(fromID, toID, jpgMsgType, body, callback);
 };
 
-imclient.sendVoiceMsg = function(fromID, toID, body, callback)
+IMClient.sendVoiceMsg = function(fromID, toID, body, callback)
 {
   _sendMsg(fromID, toID, voiceMsgType, body, callback);
 };
 
-imclient.sendVedioMsg = function(fromID, toID, body, callback)
+IMClient.sendVedioMsg = function(fromID, toID, body, callback)
 {
-  _sendMsg(fromID, toID, vedioMsgType, body, callback);
+  _sendMsg(fromID, toID, videoMsgType, body, callback);
 };
 
-imclient.sendGeoMsg = function(fromID, toID, body, callback)
+IMClient.sendGeoMsg = function(fromID, toID, body, callback)
 {
   _sendMsg(fromID, toID, geoMsgType, body, callback);
 };
 
-imclient.sendThirdPartyMsg = function(fromID, toID, body, callback)
+IMClient.sendThirdPartyMsg = function(fromID, toID, body, callback)
 {
   _sendMsg(fromID, toID, thirdPartyMsgType, body, callback);
 };
@@ -206,8 +210,8 @@ function _sendMsg(fromID, toID, type, body, callback)
   var accid = fromID;
   var accToID = toID;
 
-  var checkSum = encryptor.sha1Hash(imConfig.appSecret + nonce + currTm);
-  var headers = genHeaders(imConfig.appKey, nonce, currTm, checkSum);
+  var checkSum = Encryptor.sha1Hash(IMConfig.appSecret + nonce + currTm);
+  var headers = genHeaders(IMConfig.appKey, nonce, currTm, checkSum);
 
   var formData = {
     from:accid,
@@ -217,20 +221,20 @@ function _sendMsg(fromID, toID, type, body, callback)
     body:JSON.stringify(body),
   };
 
-  httpClient.post(imConfig.uri + sendMsg, headers, formData, function(err, httpResponse, body)
+  httpClient.post(IMConfig.uri + sendMsg, headers, formData, function(err, httpResponse, body)
   {
     genRtnMsg(callback, body);
   });
 };
 
-imclient.sendAttachMsg = function(fromID, toID, attach, pushcontent, payload, callback)
+IMClient.sendAttachMsg = function(fromID, toID, attach, pushcontent, payload, callback)
 {
   var currTm  = Date.now();
   var accid = fromID;
   var accToID = toID;
 
-  var checkSum = encryptor.sha1Hash(imConfig.appSecret + nonce + currTm);
-  var headers = genHeaders(imConfig.appKey, nonce, currTm, checkSum);
+  var checkSum = Encryptor.sha1Hash(IMConfig.appSecret + nonce + currTm);
+  var headers = genHeaders(IMConfig.appKey, nonce, currTm, checkSum);
 
   var formData = {
     from:accid,
@@ -244,7 +248,7 @@ imclient.sendAttachMsg = function(fromID, toID, attach, pushcontent, payload, ca
   if (payload)
       formData['payload'] = payload;
 
-  httpClient.post(imConfig.uri + sendAttachMsg, headers, formData, function(err, httpResponse, body)
+  httpClient.post(IMConfig.uri + sendAttachMsg, headers, formData, function(err, httpResponse, body)
   {
     genRtnMsg(callback, body);
   });
@@ -262,10 +266,10 @@ function genRtnMsg(callback, body)
       var jsonBody = JSON.parse(body);
       if (jsonBody.code != 200)
       {
-        callback({success: false, result: body});
+        callback({success: false, result: jsonBody});
       }else
         {
-          callback({success: true, result: body});
+          callback({success: true, result: jsonBody});
         }
     }
 }
@@ -280,4 +284,4 @@ function genHeaders(appKey, nonce, curTm, checkSun)
   };
 }
 
-module.exports = imclient;
+module.exports = IMClient;

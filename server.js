@@ -1,141 +1,130 @@
 'use strict';
 
-global.PROJECT_ROOT = __dirname;
-global.Promise = require('bluebird');
-Promise.config({
-	warnings: false, // Enable warnings.
-	longStackTraces: false, // Enable long stack traces.
-	cancellation: true // Enable cancellation.
+const colors = require('colors');
+const Config = require('config');
+const Inert = require('inert');
+const Path = require('path');
+const Hapi = require('hapi');
+const Swig = require('swig');
+const MySqlCommon = require('./commonlib/mysql-common');
+const RedisCommon = require('./commonlib/redis-common');
+const SettingsCommon = require('./commonlib/settings-common')
+const RabbitMQCommon = require('./commonlib/rabbitmq-common')
+const Logger = require('./commonlib/logger');
+const Boom = require('./commonlib/boom');
+
+// Create a server with a host and port
+const server = new Hapi.Server({
+  cache: [
+    {
+      name: 'redisCache',
+      engine: require('catbox-redis'),
+      host: Config.get('Redis.host'),
+      port: Config.get('Redis.port'),
+      partition: 'cache',
+    },
+  ],
 });
-global.evt = new require('events').EventEmitter();
-global.mysqlClient = {};
-global.redisClient = {};
-global.queueUtil = {};
-global.mq = {};
-
-require('colors');
-require('./commonlib/config-handler'); //for system settings pubsub
-
-var Config = require('config');
-var Hapi = require('hapi'); //main framework object
-var plugins = require('./plugins'); //load plugins
-var redisConnect = require('./utils/redis-client');
-var Path = require('path');
-var Swig = require('swig');
-var systemSettings = require('./commonlib/settings-common');
-var fs = require('fs');
-var mysqlGlobalConnect = require('./utils/ltsglobalmysql-client.js');
-var mqConnect = require('./utils/mq-client.js');
-var logger = require('./utils/logger');
-
-
-
-var server = new Hapi.Server();
-global.SERVER = server;
+global.MySqlConn = {};
+global.RedisConn = {};
+global.SystemSettings = {};
+global.MQconn = {};
 
 server.connection({
-	host: Config.get('Server.host'),
-	port: Config.get('Server.port'),
-	labels: ['api'],
-	app: {
-		swagger: {
-			info: {
-				title: 'FDT API Docs',
-				description: 'Financial Data Technologies - Social Platform API',
-			},
-		},
-	},
-	routes: {
-		files: {
-			relativeTo: Path.join(__dirname, 'public'),
-		},
-		validate: {
-			options: {
-				allowUnknown: true,
-			},
-		},
-		cors: true
-	}
+  host: Config.get('Server.host'),
+  port: Config.get('Server.port'),
+  labels: ['api'],
+  app: {
+    swagger: {
+      info: {
+        title: 'FDT API Docs',
+        description: 'Financial Data Technologies - Social Platform API',
+      },
+    },
+  },
+  routes: {
+    cors: true
+    /*
+       The Cross-Origin Resource Sharing protocol allows browsers to make cross-origin API calls.
+       CORS is required by web applications running inside a browser which are loaded from a different domain than the API server.
+       CORS headers are disabled by default (false). To enable, set cors to true, or to an object with the following options:
+    */
+  },
 });
 
-server.register(plugins, function (pluginError) {
-	if (pluginError) {
-		throw pluginError;
-	}
+server.register(require('./plugins'), (err) => {
+  if (err) {
+    throw err;
+  }
 
-	server.views({
-		//accepts multiple view path, priority ordered
-		path: ['./public/views', './public/mobile/dist'],
-		engines: {html: Swig},
-		isCached: false,
-		allowAbsolutePaths: true,
-	});
+  //mysql connection options;
+  let mysqlOption = Config.get('MySQL');
+  global.MySqlConn = new MySqlCommon(mysqlOption);
+  global.RedisConn = server.cache({
+    cache: 'redisCache',
+    expiresIn: 6 * 60 * 60 * 1000,
+    segment: 'customSegment',
+  });
+  global.MQconn = new RabbitMQCommon();
+  global.SystemSettings = new SettingsCommon();
 
-	server.state('fdt', {
-		ttl: null,
-		isSecure: false,
-		isHttpOnly: true,
-		encoding: 'base64json',
-		path: '/fdt/dashboard',
-		clearInvalid: true,
-		strictHeader: true,
-	});
-
-	require('./routers')(server);
-
-	/** Start sequencial of server start process by Kim **/
-	return Promise.all([
-		mysqlGlobalConnect.initial(),
-		redisConnect.initial(),
-	])
-		.then(function (conn) {
-			mysqlClient = conn[0];
-			console.info('MySQL(Global) is ready'.yellow);
-			server.log('info', 'MySQL(Global) is ready');
-
-			redisClient = conn[3];
-			console.info('Redis is ready'.yellow);
-			server.log('info', 'Redis is ready');
-
-		})
-		.then(mqConnect.initialAsync)
-		.then(function (channel) {
-			mq = channel;
-			console.info('MQ service is ready'.yellow);
-			server.log('info', 'MQ service is ready');
-		})
-		.then(function (res) {
-			console.log(res);
-			server.log('info:', res);
-			serverReady();
-		})
-		.then(function () {
-			server.start(function (err) {
-				if (err) {
-					throw new Error(err);
-				}
-
-				console.info('Server is running at: ' + server.info.uri);
-				server.log('info', 'Server is running at: ' + server.info.uri);
-			});
-		})
-		.then(systemSettings.loadFromMysql)
-		.catch(function (e) {
-			console.error(e);
-		});
+  Promise.all([
+      MySqlConn.initial(),
+      //RedisConn.initial(),
+      MQconn.initial(),
+  ])
+      .then(SystemSettings.initial.bind(SystemSettings))
+      .then(function() {
+        server.start((err) => {
+          if (err) {
+            throw err;
+          }else {
+            Logger.info('Server running at:', server.info.uri);
+          }
+        });
+      })
+      .catch(function(err) {
+        Logger.error(err)
+      });
 });
 
-function serverReady() {
-	if (systemSettings.getD('plugin', 'swagger', 'N') === 'Y') {
-		var apiDoc = require('./plugins/api-docs');
-		server.register(apiDoc, function (err) {
-			if (err) {
-				console.error(err);
-			}
-		});
-	}
-
-	if (systemSettings.getD('logstashTcp', 'send', 'N') === 'Y') {
-		logger.enableLogstashTcp();
-	}
+//swig 需要自行設定自己的 cache 參數，hapi 也要同時設定才有作用
+let viewCache = (Config.get('Server.environment') === 'development') ? false : true;
+if (!viewCache) {
+  Swig.setDefaults({ cache: false });
 }
+
+server.views({
+  engines: {
+    html: require('swig'),
+  },
+  relativeTo: __dirname,
+  path: 'views',
+  isCached: viewCache,
+});
+
+server.route({
+  method: 'GET',
+  path: '/{p*}',
+  handler: {
+    directory: {
+      path: 'public',
+    },
+  },
+});
+
+server.ext('onPostHandler', function(request, reply) {
+  const response = request.response;
+
+  if (response.isBoom &&
+      response.output.statusCode === 404) {
+    return reply.view('404').code(404);
+  }
+  return reply.continue();
+});
+
+server.decorate('reply', 'ok', function(result) {
+  return this.response(Boom.ok(result));
+});
+
+module.exports = server;
